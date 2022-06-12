@@ -368,6 +368,3 @@ dumps/
 *.jpg
 glad.c
 *.txt
-*.rc
-*.filters
-*.vcxproj
