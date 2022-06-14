@@ -1,1 +1,1 @@
-"Escape From Stefan" game open source repository
+This is the repositroy of  open source game "Escape From Stefan".
