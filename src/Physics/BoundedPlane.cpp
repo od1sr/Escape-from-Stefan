@@ -16,10 +16,10 @@ static const int length_of_color_array = sizeof(glm::vec4) * 4;
 
 static const float square_vertices[] = {
 	//coords			texture		normals		  
-	-1.f, -1.f,  0.f,	0.f, 1.f,	0.f, 1.f, 0.f,
-	 1.f, -1.f,  0.f,	1.f, 1.f,   0.f, 1.f, 0.f,
-	 1.f,  1.f,  0.f,	1.f, 0.f,	0.f, 1.f, 0.f,
-	-1.f,  1.f,  0.f,	0.f, 0.f,	0.f, 1.f, 0.f
+	-1.f, -1.f,  0.f,	0.f, 1.f,	0.f, 0.f, 1.f,
+	 1.f, -1.f,  0.f,	1.f, 1.f,   0.f, 0.f, 1.f,
+	 1.f,  1.f,  0.f,	1.f, 0.f,	0.f, 0.f, 1.f,
+	-1.f,  1.f,  0.f,	0.f, 0.f,	0.f, 0.f, 1.f
 };
 
 static const uint square_indices[] = {
@@ -40,7 +40,7 @@ sgl::PlainObjectSettings& sgl::BoundedPlaneSettings::convertToPlainSettings() co
 	st.x = x; st.y = y; st.z = z;
 	st.pitch = pitch; st.yaw = yaw; st.roll = roll;
 	st.mass = mass;
-	st.collision_shape = new btBox2dShape(btVector3(width/2.f, length/2.f, 0.f));
+	st.collision_shape = new btBox2dShape(btVector3(width / 2.f, length / 2.f, 0.f));
 	st.diffuse_texture = diffuse_texture;
 	st.specular_texture = specular_texture; 
 	st.diffuse_color = diffuse_color; st.specular_color = specular_color;

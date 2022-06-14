@@ -1,28 +1,14 @@
-#include "PhysicalObject.h"
+#include "PhysicalBody.h"
 #include "btBulletDynamicsCommon.h"
 #include "StefanPhysics.h"
 
-
-sgl::PhysicalObject::PhysicalObject(btRigidBody *_rigid_body)
-{
-	initRigidBody(_rigid_body);
-}
-
-void sgl::PhysicalObject::initRigidBody(btRigidBody *rb)
-{
-	rigid_body = rb;
-	rigid_body->setCollisionFlags(rigid_body->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
-	rigid_body->setUserPointer(this);
-	StefanPhysics::addRigidBody(rigid_body);
-}
-
-sgl::PhysicalObject::PhysicalObject(float x, float y, float z,
+sgl::PhysicalBody::PhysicalBody(float x, float y, float z,
 	float pitch, float yaw, float roll, btCollisionShape *collision_shape, float mass)
 {
 	initRigidBody(x, y, z, pitch, yaw, roll, collision_shape, mass);
 }
 
-void sgl::PhysicalObject::initRigidBody(float x, float y, float z, float pitch, float yaw, float roll, 
+void sgl::PhysicalBody::initRigidBody(float x, float y, float z, float pitch, float yaw, float roll,
 	btCollisionShape *collision_shape, float mass)
 {
 	btTransform transform;
@@ -42,30 +28,30 @@ void sgl::PhysicalObject::initRigidBody(float x, float y, float z, float pitch, 
 	StefanPhysics::addRigidBody(rigid_body);
 }
 
-sgl::PhysicalObject::PhysicalObject(float x, float y, float z, float pitch, float yaw, float roll)
-	: PhysicalObject(x, y, z, pitch, yaw, roll, new btEmptyShape(), 0.f)
+sgl::PhysicalBody::PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll)
+	: PhysicalBody(x, y, z, pitch, yaw, roll, new btEmptyShape(), 0.f)
 {
 }
 
-sgl::PhysicalObject::PhysicalObject(float x, float y, float z)
-	: PhysicalObject(x, y, z, 0.f, 0.f, 0.f)
+sgl::PhysicalBody::PhysicalBody(float x, float y, float z)
+	: PhysicalBody(x, y, z, 0.f, 0.f, 0.f)
 {
 }
 
-sgl::PhysicalObject::PhysicalObject()
-	: PhysicalObject(0.f, 0.f, 0.f)
+sgl::PhysicalBody::PhysicalBody()
+	: PhysicalBody(0.f, 0.f, 0.f)
 {
 }
 
-void sgl::PhysicalObject::move(float dx, float dy, float dz)
+void sgl::PhysicalBody::move(float dx, float dy, float dz)
 {
 	btTransform transform;
 	rigid_body->getMotionState()->getWorldTransform(transform);
 	btVector3 coordinates = transform.getOrigin();
-	PhysicalObject::setCoordinates(coordinates.x() + dx, coordinates.y() + dy, coordinates.z() + dz);
+	PhysicalBody::setCoordinates(coordinates.x() + dx, coordinates.y() + dy, coordinates.z() + dz);
 }
 
-void sgl::PhysicalObject::setCoordinates(float x, float y, float z)
+void sgl::PhysicalBody::setCoordinates(float x, float y, float z)
 {
 	btTransform transform;
 	rigid_body->getMotionState()->getWorldTransform(transform);
@@ -73,7 +59,7 @@ void sgl::PhysicalObject::setCoordinates(float x, float y, float z)
 	rigid_body->getMotionState()->setWorldTransform(transform);
 }
 
-glm::vec3 sgl::PhysicalObject::getCoordinates() const
+glm::vec3 sgl::PhysicalBody::getCoordinates() const
 {
 	btTransform transform;
 	rigid_body->getMotionState()->getWorldTransform(transform);
@@ -81,31 +67,49 @@ glm::vec3 sgl::PhysicalObject::getCoordinates() const
 	return glm::vec3 { pos.x(), pos.y(), pos.z() };
 }
 
-void sgl::PhysicalObject::rotate(float delta_pitch, float delta_yaw, float delta_roll)
-{
-	glm::vec3 rotation = getRotation();
-	setRotation(rotation.x + delta_pitch, rotation.y + delta_yaw, rotation.z + delta_roll);
-}
-
-void sgl::PhysicalObject::setRotation(float pitch, float yaw, float roll)
+void sgl::PhysicalBody::rotate(float pitch, float yaw, float roll)
 {
 	btTransform transform;
 	rigid_body->getMotionState()->getWorldTransform(transform);
 	btQuaternion rot;
 	rot.setEuler(yaw, pitch, roll);
 	transform.setRotation(rot);
+	rigid_body->getMotionState()->setWorldTransform(transform);
 }
 
-glm::vec3 sgl::PhysicalObject::getRotation() const
+glm::vec3 sgl::PhysicalBody::getRotation() const
 {
 	glm::vec3 rotation;
 	btTransform transform;
 	rigid_body->getMotionState()->getWorldTransform(transform);
-	transform.getRotation().getEulerZYX(rotation.y, rotation.x, rotation.z);
+	transform.getRotation().getEulerZYX(rotation.z, rotation.y, rotation.x);
 	return rotation;
 }
 
-sgl::PhysicalObject::~PhysicalObject()
+float sgl::PhysicalBody::getMass() const
+{
+	return rigid_body->getMass();
+}
+
+void sgl::PhysicalBody::setMass(float m)
+{
+	btVector3 inertia(0, 0, 0);
+	if (m != 0.f)
+		rigid_body->getCollisionShape()->calculateLocalInertia(m, inertia);
+	rigid_body->setMassProps(m, inertia);
+}
+
+glm::mat4 sgl::PhysicalBody::getModelMatrix() const
+{
+	glm::vec4 mat_vector[4];
+	btTransform transform;
+	rigid_body->getMotionState()->getWorldTransform(transform);
+	transform.getOpenGLMatrix((float*)mat_vector);
+	return glm::mat4(mat_vector[0], mat_vector[1],
+		mat_vector[2], mat_vector[3]);
+}
+
+sgl::PhysicalBody::~PhysicalBody()
 {
 	StefanPhysics::removeCollisonObject(rigid_body);
 	delete rigid_body->getMotionState();

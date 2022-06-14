@@ -39,9 +39,9 @@ void sgl::StefanPhysics::removeCollisonObject(btCollisionObject *body)
 
 void StefanPhysics::terminate()
 {
+    delete world;
     delete broadphase;
     delete collision_configuration;
     delete dispatcher;
     delete solver;
-    delete world;
 }

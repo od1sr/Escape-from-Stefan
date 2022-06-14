@@ -10,7 +10,7 @@
 
 namespace sgl
 {
-    class PhysicalObject :
+    class PhysicalBody :
         public ITransformable
     {
     protected:
@@ -18,24 +18,23 @@ namespace sgl
 
         void initRigidBody(float x, float y, float z, float pitch, float yaw, float roll, 
             btCollisionShape *collision_shape, float mass);
-        void initRigidBody(btRigidBody *rb);
+        glm::mat4 getModelMatrix() const;
     private:
-        PhysicalObject(PhysicalObject&figure);
+        PhysicalBody(PhysicalBody&figure);
     public:
-        //the rigid_body won't be copied and delted by object
-        PhysicalObject(btRigidBody *rigid_body);
         //the collision shape won't be copied and delted by object
-        PhysicalObject(float x, float y, float z, float pitch, float yaw, float roll, btCollisionShape *collision_shape, float mass);
-        PhysicalObject(float x, float y, float z, float pitch, float yaw, float roll);
-        PhysicalObject(float x, float y, float z);
-        PhysicalObject();
+        PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll, btCollisionShape *collision_shape, float mass);
+        PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll);
+        PhysicalBody(float x, float y, float z);
+        PhysicalBody();
         virtual void move(float dx, float dy, float dz) override;
         virtual void setCoordinates(float x, float y, float z) override;
         virtual glm::vec3 getCoordinates() const override;
         virtual void rotate(float delta_pitch, float delta_yaw, float delta_roll) override;
-        virtual void setRotation(float pitch, float yaw, float roll) override;
         virtual glm::vec3 getRotation() const override;
-        ~PhysicalObject();
+        float getMass() const override;
+        void setMass(float m) override;
+        ~PhysicalBody();
     };
 }
 

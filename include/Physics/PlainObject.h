@@ -1,7 +1,7 @@
 #ifndef _PLAIN_OBJECT_CLASS_H_
 #define _PLAIN_OBJECT_CLASS_H_
 
-#include "PhysicalObject.h"
+#include "PhysicalBody.h"
 #include "VAO.h"
 #include "glm/matrix.hpp"
 #include "Texture.h"
@@ -23,7 +23,7 @@ namespace sgl
         PlainObjectSettings();
     };
     class PlainObject :
-        public PhysicalObject, public IDrawable
+        public PhysicalBody, public IDrawable
     {
     protected:
         VAO vao;
@@ -33,7 +33,6 @@ namespace sgl
         glm::vec4 *specular_color;
 
         void initPlainObject(const PlainObjectSettings &settings);
-        glm::mat4 getModelMatrix() const;
     private:
         PlainObject(PlainObject&);
     public:
@@ -48,7 +47,7 @@ namespace sgl
         virtual void setSpecularColor(float r, float g, float b, float a);
         glm::vec4 getDiffuseColor() const;
         glm::vec4 getSpecularColor() const;
-        void setTexture(const Texture diffuse_texture, const Texture specular_texture);
+        void setTexture(const Texture &diffuse_texture, const Texture &specular_texture);
         ~PlainObject();
     };
 }

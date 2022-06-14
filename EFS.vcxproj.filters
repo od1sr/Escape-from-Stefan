@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\Graphics">
+      <UniqueIdentifier>{c4581941-8aa2-44c0-8042-2bac2af1a60a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Physics">
+      <UniqueIdentifier>{531d22c4-017a-40ae-90b9-1407eabdf5a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Other">
+      <UniqueIdentifier>{914d7965-318b-491a-92d5-119e0fdfc175}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Graphics">
+      <UniqueIdentifier>{d58a2627-5c61-459e-9abb-7dcbd515d598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Physics">
+      <UniqueIdentifier>{22284484-64e9-4bb0-aff7-63900178aa26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Other">
+      <UniqueIdentifier>{3f142d31-536e-4e1f-8e7d-cc1fb2f7a23e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Graphics\CameraFPS.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\DirectionalLight.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Light.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Mesh.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Model.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\PointLight.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ProjectLight.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Shader.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Texture.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\VAO.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\StefanGraphics.cpp">
+      <Filter>Исходные файлы\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\BoundedPlane.cpp">
+      <Filter>Исходные файлы\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\GameObject3D.cpp">
+      <Filter>Исходные файлы\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicalBody.cpp">
+      <Filter>Исходные файлы\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PlainObject.cpp">
+      <Filter>Исходные файлы\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\StefanPhysics.cpp">
+      <Filter>Исходные файлы\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Исходные файлы\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="src\logging.cpp">
+      <Filter>Исходные файлы\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="app\main.cpp">
+      <Filter>Исходные файлы\Other</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Graphics\CameraFPS.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\DirectionalLight.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\IDrawable.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Light.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Mesh.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Model.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\PointLight.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ProjectLight.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Shader.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\StefanGraphics.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\VAO.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Texture.h">
+      <Filter>Файлы заголовков\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\BoundedPlane.h">
+      <Filter>Файлы заголовков\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\GameObject3D.h">
+      <Filter>Файлы заголовков\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\PhysicalBody.h">
+      <Filter>Файлы заголовков\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\PlainObject.h">
+      <Filter>Файлы заголовков\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\StefanPhysics.h">
+      <Filter>Файлы заголовков\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config.h">
+      <Filter>Файлы заголовков\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="include\logging.h">
+      <Filter>Файлы заголовков\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Файлы заголовков\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\ITransformable.h">
+      <Filter>Файлы заголовков\Physics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\dirt.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="assets\textures\grass_block_side.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="assets\textures\grass_block_top.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="assets\textures\grass_blockpng.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="assets\textures\wall.jpg">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Graphic Library.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\GLSL-files\fragment shader.glsl">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="src\GLSL-files\vertex shader.glsl">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+  </ItemGroup>
+</Project>

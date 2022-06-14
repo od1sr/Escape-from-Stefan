@@ -31,6 +31,7 @@ void sgl::PlainObject::initPlainObject(const PlainObjectSettings &settings)
 		settings.diffuse_color.a);
 	setSpecularColor(settings.specular_color.r, settings.specular_color.g, settings.specular_color.b,
 		settings.specular_color.a);
+	shininess = settings.shininess;
 }
 
 void sgl::PlainObject::draw(Shader &shader) const
@@ -56,16 +57,6 @@ void sgl::PlainObject::draw(Shader &shader) const
 		shader.setInt("material.spec_textures_num", 0);
 	shader.setInt("material.shininess", shininess);
 	vao.use();
-}
-
-glm::mat4 sgl::PlainObject::getModelMatrix() const
-{
-	glm::vec4 mat_vector[4];
-	btTransform transform;
-	rigid_body->getMotionState()->getWorldTransform(transform);
-	transform.getOpenGLMatrix((float*)mat_vector);
-	return glm::mat4 (mat_vector[0], mat_vector[1],
-		mat_vector[2], mat_vector[3]);
 }
 
 void sgl::PlainObject::setDiffuseColor(float r, float g, float b, float a)
@@ -104,7 +95,7 @@ glm::vec4 sgl::PlainObject::getSpecularColor() const
 		return glm::vec4(0.f);
 }
 
-void sgl::PlainObject::setTexture(const Texture _diffuse_texture, const Texture _specular_texture)
+void sgl::PlainObject::setTexture(const Texture &_diffuse_texture, const Texture &_specular_texture)
 {
 	if (!diffuse_texture)
 		diffuse_texture = new Texture;

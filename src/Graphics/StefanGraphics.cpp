@@ -1,21 +1,22 @@
-#include "StefanGraphic.h"
+#include "StefanGraphics.h"
 #include "Texture.h"
 #include "logging.h"
 #include "config.h"
 
-using sgl::StefanGraphic;
+using sgl::StefanGraphics;
 
-int StefanGraphic::screen_w, StefanGraphic::screen_h;
-float StefanGraphic::mouse_offset_x, StefanGraphic::mouse_offset_y, StefanGraphic::mouse_last_x, 
-	StefanGraphic::mouse_last_y;
-GLFWwindow *StefanGraphic::win;
-sgl::CameraFPS StefanGraphic::cam;
-Shader StefanGraphic::shader;
-glm::mat4 StefanGraphic::projection;
-sgl::ProjectLight StefanGraphic::flashlight;
-sgl::DirectionalLight StefanGraphic::directional_light;
-sgl::Plane *StefanGraphic::plane = NULL;
-sgl::GameObject *StefanGraphic::car = NULL;
+int StefanGraphics::screen_w, StefanGraphics::screen_h;
+float StefanGraphics::mouse_offset_x, StefanGraphics::mouse_offset_y, StefanGraphics::mouse_last_x, 
+	StefanGraphics::mouse_last_y;
+GLFWwindow *StefanGraphics::win;
+sgl::CameraFPS StefanGraphics::cam;
+Shader StefanGraphics::shader;
+glm::mat4 StefanGraphics::projection;
+sgl::ProjectLight StefanGraphics::flashlight;
+sgl::DirectionalLight StefanGraphics::directional_light;
+sgl::BoundedPlane *StefanGraphics::plane = NULL;
+
+sgl::GameObject3D *StefanGraphics::car = NULL;
 
 namespace
 {
@@ -103,7 +104,7 @@ namespace
 	};
 }
 
-void StefanGraphic::init(const char *window_name, int win_width, int win_height)
+void StefanGraphics::init(const char *window_name, int win_width, int win_height)
 {
 	screen_w = win_width;
 	screen_h = win_height;
@@ -113,14 +114,25 @@ void StefanGraphic::init(const char *window_name, int win_width, int win_height)
 	createWindow(window_name);
 	createShader();
 	createLights();
-	plane = new Plane(0.f, -5.f, 0.f, 40.f, 40.f, 0.f, glm::radians(30.f), 0.f, 64,
-		block_texture_path, block_litemap_texture_path);
-	car = new GameObject("assets\\3d models\\lada\\source\\\Wavefront\\testtt.obj");
+	BoundedPlaneSettings settings;
+	Texture diffuse_texture, specular_texture;
+	settings.x = settings.z = 0.f;
+	settings.y = -5.f;
+	settings.width = settings.length = 40.f;
+	settings.roll = settings.yaw = 0.f;
+	settings.pitch = glm::radians(-90.f);
+	settings.shininess = 64;
+	settings.mass = 5.f;
+	loadTexture(&diffuse_texture, block_texture_path, TextureType::DIFFUSE);
+	settings.diffuse_texture = diffuse_texture;
+	loadTexture(&specular_texture, block_litemap_texture_path, TextureType::SPECULAR);
+	settings.specular_texture = specular_texture;
+	plane = new BoundedPlane(settings);
 	projection = glm::mat4(1.f);
 	cam = CameraFPS(glm::vec3(0.f, 1.f, 5.f));
 }
 
-void StefanGraphic::createWindow(const char *win_name)
+void StefanGraphics::createWindow(const char *win_name)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -161,16 +173,16 @@ void StefanGraphic::createWindow(const char *win_name)
 	glfwSetCursorPos(win, screen_w / 2.f, screen_h / 2.f);
 }
 
-void StefanGraphic::createShader()
+void StefanGraphics::createShader()
 {
-	shader = Shader("vertex shader.glsl", "fragment shader.glsl");
+	shader = Shader("shaders\\vertex shader.glsl", "shaders\\fragment shader.glsl");
 	Shader::CompileStatus status = shader.getCompilestatus();
 	if (status != Shader::CompileStatus::OK)
 		exit((int)status);
 	shader.use();
 }
 
-void StefanGraphic::createLights()
+void StefanGraphics::createLights()
 {
 	flashlight.ambient = vec4(0.1f, 0.1f, 0.1f, 1.f);
 	flashlight.diffuse = vec4(0.5f, 0.5f, 0.5f, 1.f);
@@ -192,7 +204,7 @@ void StefanGraphic::createLights()
 	directional_light.turnOn();
 }
 
-void StefanGraphic::mainLoop()
+void StefanGraphics::mainLoop()
 {
 	while (!glfwWindowShouldClose(win))
 	{
@@ -219,14 +231,14 @@ void StefanGraphic::mainLoop()
 		flashlight.pos = cam_pos;
 		Light::DrawLights(shader);
 		plane->draw(shader);
-		plane->rotate(0.f, 0.001f, 0.f);
-		car->draw(shader);
+		glm::vec3 rotation = plane->getRotation();
+		plane->rotate(rotation.x, rotation.y + 0.001f, rotation.z);
 		glfwSwapBuffers(win);
 		glfwPollEvents();
 	}
 }
 
-void StefanGraphic::moveCamera()
+void StefanGraphics::moveCamera()
 {
 	static double last_time = glfwGetTime();
 	double now = glfwGetTime();
@@ -247,9 +259,8 @@ void StefanGraphic::moveCamera()
 		cam.directionalMovement(sgl::up, -offset);
 }
 
-void StefanGraphic::terminate()
+void StefanGraphics::terminate()
 {
 	delete plane;
-	delete car;
 	glfwTerminate();
 }

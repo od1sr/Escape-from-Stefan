@@ -10,12 +10,12 @@
 #include "ProjectLight.h"
 #include "DirectionalLight.h"
 #include "GLFW/glfw3.h"
-#include "Plane.h"
-#include "GameObject.h"
+#include "BoundedPlane.h"
+#include "GameObject3D.h"
 
 namespace sgl
 {
-	class StefanGraphic
+	class StefanGraphics
 	{
 	private:
 		static int screen_w;
@@ -31,8 +31,8 @@ namespace sgl
 		static glm::mat4 projection;
 		static ProjectLight flashlight;
 		static DirectionalLight directional_light;
-		static Plane *plane;
-		static GameObject *car;
+		static BoundedPlane *plane;
+		static GameObject3D *car;
 
 		static void moveCamera();
 		static void createWindow(const char *win_name);
