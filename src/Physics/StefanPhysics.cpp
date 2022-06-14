@@ -27,6 +27,11 @@ void StefanPhysics::init()
     gContactAddedCallback = collideCallbackHandler;
 }
 
+void sgl::StefanPhysics::stepSimulation()
+{
+    world->stepSimulation(1.f / 60.f, 10);
+}
+
 void sgl::StefanPhysics::addRigidBody(btRigidBody *body)
 {
     world->addRigidBody(body);

@@ -32,6 +32,7 @@ namespace sgl
 		static ProjectLight flashlight;
 		static DirectionalLight directional_light;
 		static BoundedPlane *plane;
+		static BoundedPlane *plane2;
 		static GameObject3D *car;
 
 		static void moveCamera();

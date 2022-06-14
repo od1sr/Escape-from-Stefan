@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "logging.h"
 #include "config.h"
+#include "StefanPhysics.h"
 
 using sgl::StefanGraphics;
 
@@ -15,6 +16,7 @@ glm::mat4 StefanGraphics::projection;
 sgl::ProjectLight StefanGraphics::flashlight;
 sgl::DirectionalLight StefanGraphics::directional_light;
 sgl::BoundedPlane *StefanGraphics::plane = NULL;
+sgl::BoundedPlane *StefanGraphics::plane2 = NULL;
 
 sgl::GameObject3D *StefanGraphics::car = NULL;
 
@@ -114,10 +116,11 @@ void StefanGraphics::init(const char *window_name, int win_width, int win_height
 	createWindow(window_name);
 	createShader();
 	createLights();
-	BoundedPlaneSettings settings;
+	BoundedPlaneSettings settings, settings2;
 	Texture diffuse_texture, specular_texture;
-	settings.x = settings.z = 0.f;
+	settings.x = settings.z = 20.f;
 	settings.y = -5.f;
+	settings.z = -20.f;
 	settings.width = settings.length = 40.f;
 	settings.roll = settings.yaw = 0.f;
 	settings.pitch = glm::radians(-90.f);
@@ -127,7 +130,13 @@ void StefanGraphics::init(const char *window_name, int win_width, int win_height
 	settings.diffuse_texture = diffuse_texture;
 	loadTexture(&specular_texture, block_litemap_texture_path, TextureType::SPECULAR);
 	settings.specular_texture = specular_texture;
+	settings2 = settings;
+	settings2.mass = 0.f;
+	settings.y += 10.f;
+	settings.x += 5.f;
+	settings.z += 10.f;
 	plane = new BoundedPlane(settings);
+	plane2 = new BoundedPlane(settings2);
 	projection = glm::mat4(1.f);
 	cam = CameraFPS(glm::vec3(0.f, 1.f, 5.f));
 }
@@ -233,8 +242,10 @@ void StefanGraphics::mainLoop()
 		plane->draw(shader);
 		glm::vec3 rotation = plane->getRotation();
 		plane->rotate(rotation.x, rotation.y + 0.001f, rotation.z);
+		plane2->draw(shader);
 		glfwSwapBuffers(win);
 		glfwPollEvents();
+		StefanPhysics::stepSimulation();
 	}
 }
 
@@ -262,5 +273,6 @@ void StefanGraphics::moveCamera()
 void StefanGraphics::terminate()
 {
 	delete plane;
+	delete plane2;
 	glfwTerminate();
 }
