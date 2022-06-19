@@ -3,7 +3,6 @@
 #include "logging.h"
 #include "config.h"
 #include "StefanPhysics.h"
-#include <vector>
 
 using sgl::StefanGraphics;
 
@@ -16,94 +15,12 @@ Shader StefanGraphics::shader;
 glm::mat4 StefanGraphics::projection;
 sgl::ProjectLight StefanGraphics::flashlight;
 sgl::DirectionalLight StefanGraphics::directional_light;
-sgl::BoundedPlane *StefanGraphics::plane = NULL;
-sgl::GameObject3D *StefanGraphics::car = NULL;
-static std::vector<sgl::IDrawable*> objects_to_draw;
+std::vector<const sgl::IDrawable*> StefanGraphics::objects_to_draw;
 
 namespace
 {
-	const int textures_number = 3;
-	const char block_texture_path[] = "assets\\textures\\box.png";
-	const char floor_texture_path[] = "assets\\textures\\floor.png";
-	const char block_litemap_texture_path[] = "assets\\textures\\lightmap.png";
 	const float sensetivity = 0.007f;
 	const float speed = 10.f;
-	const float texture_apart = 1.f / 3.f;
-	// textures: <0px> bottom side, top <48px>
-	const float block_bottom_texture_x = 0.f;
-	const float block_side_texture_x = texture_apart;
-	const float block_top_texture_x = texture_apart * 2;
-	float block_vertices[] = {
-		//sides
-		// positions						textures pos			 normals			diffuse colors		specular colors
-		 //back
-		 -0.5f, -0.5f, -0.5f,	 block_side_texture_x,	 0.f,		0.f, 0.f, -1.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f, -0.5f, -0.5f,	 block_top_texture_x,	 0.f,		0.f, 0.f, -1.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f,  0.5f, -0.5f,	 block_top_texture_x,	 1.f,		0.f, 0.f, -1.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 -0.5f,  0.5f, -0.5f,	 block_side_texture_x,	 1.f,		0.f, 0.f, -1.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 //front										 
-		 -0.5f, -0.5f, 0.5f,	 block_side_texture_x,	 0.f,		0.f, 0.f, 1.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f, -0.5f, 0.5f,	 block_top_texture_x,	 0.f,		0.f, 0.f, 1.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f,  0.5f, 0.5f,	 block_top_texture_x,	 1.f,		0.f, 0.f, 1.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 -0.5f,  0.5f, 0.5f,	 block_side_texture_x,	 1.f,		0.f, 0.f, 1.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 //left											 
-		 -0.5f,  0.5f,  0.5f,	 block_top_texture_x,	 1.f,		-1.f, 0.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 -0.5f,  0.5f, -0.5f,	 block_side_texture_x,	 1.f,	   	-1.f, 0.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 -0.5f, -0.5f, -0.5f,	 block_side_texture_x,	 0.f,	   -1.f, 0.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 -0.5f, -0.5f,  0.5f,	 block_top_texture_x,	 0.f,		-1.f, 0.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 //right
-		  0.5f,  0.5f,  0.5f,	 block_top_texture_x,	 1.f,	   1.f, 0.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f,  0.5f, -0.5f,	 block_side_texture_x,	 1.f,	   1.f, 0.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f, -0.5f, -0.5f,	 block_side_texture_x,	 0.f,	   1.f, 0.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f, -0.5f,  0.5f,	 block_top_texture_x,	 0.f,	   1.f, 0.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  //bottom
-		 -0.5f, -0.5f, -0.5f,	 block_bottom_texture_x, 1.0f,		0.f, -1.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f, -0.5f, -0.5f,	 block_side_texture_x,   1.0f,		0.f, -1.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f, -0.5f,  0.5f,	 block_side_texture_x,   0.0f,		0.f, -1.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 -0.5f, -0.5f,  0.5f,	 block_bottom_texture_x, 0.0f,		0.f, -1.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 //up
-		 -0.5f,  0.5f, -0.5f,	 block_top_texture_x,	 1.0f,		0.f, 1.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f,  0.5f, -0.5f,	 1.f,					 1.0f,		0.f, 1.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		  0.5f,  0.5f,  0.5f,	 1.f,					 0.0f,		0.f, 1.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		 -0.5f,  0.5f,  0.5f,	 block_top_texture_x,	 0.0f,		0.f, 1.f, 0.f,		0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f
-	};
-	glm::vec3 cube_pos[] = {
-		glm::vec3(0.0f,  0.f, 0.f),
-		glm::vec3(1.0f,  0.f, 0.f),
-		glm::vec3(-1.f, 0.f, 0.f),
-		glm::vec3(0.f, 1.f, 0.f),
-		glm::vec3(0.f, 2.f, 0.f)
-	};
-	uint block_indices[] = {
-		0, 1, 2,
-		0, 3, 2,
-
-		4, 5, 6,
-		4, 7, 6,
-
-		8, 9, 10,
-		10, 11, 8,
-
-		12, 13, 14,
-		14, 15, 12,
-
-		16, 17, 18,
-		18, 19, 16,
-
-		20, 21, 22,
-		22, 23, 20
-	};
-	float floor_vertices[] = {
-		//coords				texture		normals		  	diffuse colors		specular colors
-	   -20.f, -5.f, -20.f,		0.f, 1.f,	0.f, 1.f, 0.f,	0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		20.f, -5.f, -20.f,		1.f, 1.f,	0.f, 1.f, 0.f,	0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-		20.f, -5.f,  20.f,		1.f, 0.f,	0.f, 1.f, 0.f,	0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f,
-	   -20.f, -5.f,  20.f,		0.f, 0.f,	0.f, 1.f, 0.f, 	0.f,0.f,0.f,0.f,	0.f,0.f,0.f,0.f
-	};
-	uint floor_indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
 }
 
 void StefanGraphics::init(const char *window_name)
@@ -113,24 +30,7 @@ void StefanGraphics::init(const char *window_name)
 	createWindow(window_name);
 	createShader();
 	createLights();
-	BoundedPlaneSettings settings;
-	Texture diffuse_texture, specular_texture;
-	settings.y = -5.f;
-	settings.z = -20.f;
-	settings.width = settings.length = 40.f;
-	settings.roll = settings.yaw = 0.f;
-	settings.shininess = 64;
-	settings.pitch = glm::radians(-90.f);
-	loadTexture(&diffuse_texture, block_texture_path, TextureType::DIFFUSE);
-	settings.diffuse_texture = diffuse_texture;
-	loadTexture(&specular_texture, block_litemap_texture_path, TextureType::SPECULAR);
-	settings.specular_texture = specular_texture;
-	plane = new BoundedPlane(settings);
-	car = new GameObject3D(
-		0.f, 500.f, -20.f, 0.f, 0.f, 0.f,
-		new btBoxShape(btVector3(5.f, 2.5f, 5.f)), 2000.f,
-		new Model("assets\\3d models\\lada\\source\\Wavefront\\testtt.obj")
-	);
+	
 	projection = glm::mat4(1.f);
 	cam = CameraFPS(glm::vec3(0.f, 1.f, 5.f));
 }
@@ -241,7 +141,7 @@ void StefanGraphics::mainLoop()
 		view = cam.getViewMatrix();
 		projection = glm::perspective(glm::radians(45.0f),
 			(float)screen_w / screen_h,
-			0.1f, 1000.0f);
+			0.1f, 1000.0f); 
 		GL_CALL(glClearColor(0.1f, 0.f, 0.f, 1.f));
 		GL_CALL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
 		cam.rotate(mouse_offset_x * sensetivity, mouse_offset_y * sensetivity);
@@ -254,11 +154,11 @@ void StefanGraphics::mainLoop()
 		flashlight.setDirection(cam_direction);
 		flashlight.pos = cam_pos;
 		Light::DrawLights(shader);
-		plane->draw(shader);
-		car->draw(shader);
+		StefanPhysics::stepSimulation();
+		for (int i = objects_to_draw.size() - 1; i >= 0; --i)
+			objects_to_draw[i]->draw(shader);
 		glfwSwapBuffers(win);
 		glfwPollEvents();
-		StefanPhysics::stepSimulation();
 	}
 }
 
@@ -285,12 +185,10 @@ void StefanGraphics::moveCamera()
 
 void StefanGraphics::terminate()
 {
-	delete plane;
-	delete car->get3DModel();
-	delete car;
 	glfwTerminate();
 }
 
-void sgl::StefanGraphics::addObject(IDrawable* object)
+void sgl::StefanGraphics::addObject(const IDrawable *object)
 {
+	objects_to_draw.push_back(object);
 }

@@ -10,9 +10,9 @@
 #include "ProjectLight.h"
 #include "DirectionalLight.h"
 #include "GLFW/glfw3.h"
-#include "BoundedPlane.h"
 #include "GameObject3D.h"
 #include "IDrawable.h"
+#include <vector>
 
 namespace sgl
 {
@@ -32,8 +32,7 @@ namespace sgl
 		static glm::mat4 projection;
 		static ProjectLight flashlight;
 		static DirectionalLight directional_light;
-		static BoundedPlane *plane;
-		static GameObject3D *car;
+		static std::vector<const sgl::IDrawable*> objects_to_draw;
 
 		static void moveCamera();
 		static void createWindow(const char *win_name);
@@ -45,7 +44,7 @@ namespace sgl
 		static void init(const char *window_name);
 		static void mainLoop();
 		static void terminate();
-		static void addObject(IDrawable *object);
+		static void addObject(const IDrawable *object);
 	};
 }
 #endif // ! _STEFAN_GRAPHICS_H_
