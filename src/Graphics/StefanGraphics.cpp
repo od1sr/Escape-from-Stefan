@@ -3,6 +3,7 @@
 #include "logging.h"
 #include "config.h"
 #include "StefanPhysics.h"
+#include <vector>
 
 using sgl::StefanGraphics;
 
@@ -16,9 +17,8 @@ glm::mat4 StefanGraphics::projection;
 sgl::ProjectLight StefanGraphics::flashlight;
 sgl::DirectionalLight StefanGraphics::directional_light;
 sgl::BoundedPlane *StefanGraphics::plane = NULL;
-sgl::BoundedPlane *StefanGraphics::plane2 = NULL;
-
 sgl::GameObject3D *StefanGraphics::car = NULL;
+static std::vector<sgl::IDrawable*> objects_to_draw;
 
 namespace
 {
@@ -106,80 +106,95 @@ namespace
 	};
 }
 
-void StefanGraphics::init(const char *window_name, int win_width, int win_height)
+void StefanGraphics::init(const char *window_name)
 {
-	screen_w = win_width;
-	screen_h = win_height;
 	mouse_offset_x = 0.;
 	mouse_offset_y = 0.;
-	mouse_last_x = screen_w / 2.f, mouse_last_y = screen_h / 2.f;
 	createWindow(window_name);
 	createShader();
 	createLights();
-	BoundedPlaneSettings settings, settings2;
+	BoundedPlaneSettings settings;
 	Texture diffuse_texture, specular_texture;
-	settings.x = settings.z = 20.f;
 	settings.y = -5.f;
 	settings.z = -20.f;
 	settings.width = settings.length = 40.f;
 	settings.roll = settings.yaw = 0.f;
-	settings.pitch = glm::radians(-90.f);
 	settings.shininess = 64;
-	settings.mass = 5.f;
+	settings.pitch = glm::radians(-90.f);
 	loadTexture(&diffuse_texture, block_texture_path, TextureType::DIFFUSE);
 	settings.diffuse_texture = diffuse_texture;
 	loadTexture(&specular_texture, block_litemap_texture_path, TextureType::SPECULAR);
 	settings.specular_texture = specular_texture;
-	settings2 = settings;
-	settings2.mass = 0.f;
-	settings.y += 10.f;
-	settings.x += 5.f;
-	settings.z += 10.f;
 	plane = new BoundedPlane(settings);
-	plane2 = new BoundedPlane(settings2);
+	car = new GameObject3D(
+		0.f, 500.f, -20.f, 0.f, 0.f, 0.f,
+		new btBoxShape(btVector3(5.f, 2.5f, 5.f)), 2000.f,
+		new Model("assets\\3d models\\lada\\source\\Wavefront\\testtt.obj")
+	);
 	projection = glm::mat4(1.f);
 	cam = CameraFPS(glm::vec3(0.f, 1.f, 5.f));
 }
 
+void glfwError(int id, const char *description);
 void StefanGraphics::createWindow(const char *win_name)
 {
+	glfwSetErrorCallback(glfwError);
 	glfwInit();
+	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+	screen_w = mode->width;
+	screen_h = mode->height;
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	win = glfwCreateWindow(screen_w, screen_h, win_name, NULL, NULL);
 	if (!win)
 	{
-		save_error_log("Failed to create game window");
 		glfwTerminate();
 		exit(1);
 	}
 	glfwMakeContextCurrent(win);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		save_error_log("Failed to initialize GLAD");
+		glfwTerminate();
 		exit(2);
 	}
+#ifndef _DEBUG // it is difficult to debug in fullscreen mode
+	glfwSetWindowMonitor(win, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+#endif // !_DEBUG
 	glfwSetFramebufferSizeCallback(win,
-		[](GLFWwindow* win, int w, int h)
-		{
-			screen_h = h;
-			screen_w = w;
-			glViewport(0, 0, w, h);
-		}
+		framebufferSizeCallback
 	);
 	glViewport(0, 0, screen_w, screen_h);
 	glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(win,
-		[](GLFWwindow* win, double xpos, double ypos)
-		{
-			mouse_offset_x = mouse_last_x - xpos;
-			mouse_offset_y = mouse_last_y - ypos;
-			mouse_last_x = xpos;
-			mouse_last_y = ypos;
-		}
+		mouseMovementCallback
 	);
-	glfwSetCursorPos(win, screen_w / 2.f, screen_h / 2.f);
+	glfwSetCursorPos(win, mouse_last_x = screen_w / 2.f, mouse_last_y = screen_h / 2.f);
+}
+
+void glfwError(int id, const char *description)
+{
+	int log_len = 40 + strlen(description);
+	char *log = new char[log_len];
+	sprintf_s(log, log_len, "[GLFW Error] (%d: %s)\n", id, description);
+	save_error_log(log);
+	delete[] log;
+}
+
+void StefanGraphics::framebufferSizeCallback(GLFWwindow *win, int w, int h)
+{
+	screen_h = h;
+	screen_w = w;
+	glViewport(0, 0, w, h);
+}
+
+void sgl::StefanGraphics::mouseMovementCallback(GLFWwindow* win, double xpos, double ypos)
+{
+	mouse_offset_x = mouse_last_x - xpos;
+	mouse_offset_y = mouse_last_y - ypos;
+	mouse_last_x = xpos;
+	mouse_last_y = ypos;
 }
 
 void StefanGraphics::createShader()
@@ -240,9 +255,7 @@ void StefanGraphics::mainLoop()
 		flashlight.pos = cam_pos;
 		Light::DrawLights(shader);
 		plane->draw(shader);
-		glm::vec3 rotation = plane->getRotation();
-		plane->rotate(rotation.x, rotation.y + 0.001f, rotation.z);
-		plane2->draw(shader);
+		car->draw(shader);
 		glfwSwapBuffers(win);
 		glfwPollEvents();
 		StefanPhysics::stepSimulation();
@@ -273,6 +286,11 @@ void StefanGraphics::moveCamera()
 void StefanGraphics::terminate()
 {
 	delete plane;
-	delete plane2;
+	delete car->get3DModel();
+	delete car;
 	glfwTerminate();
+}
+
+void sgl::StefanGraphics::addObject(IDrawable* object)
+{
 }

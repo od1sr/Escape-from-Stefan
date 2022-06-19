@@ -39,8 +39,10 @@ namespace sgl
 		static void createWindow(const char *win_name);
 		static void createShader();
 		static void createLights();
+		static void framebufferSizeCallback(GLFWwindow *win, int w, int h);
+		static void mouseMovementCallback(GLFWwindow *win, double xpos, double ypos);
 	public:
-		static void init(const char *window_name, int win_width, int win_height);
+		static void init(const char *window_name);
 		static void mainLoop();
 		static void terminate();
 		static void addObject(IDrawable *object);

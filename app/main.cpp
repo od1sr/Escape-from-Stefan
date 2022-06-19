@@ -4,7 +4,7 @@
 int main()
 {
 	sgl::StefanPhysics::init();
-	sgl::StefanGraphics::init("Minesraft", 1920, 1080);
+	sgl::StefanGraphics::init("Minesraft");
 	sgl::StefanGraphics::mainLoop();
 	sgl::StefanGraphics::terminate();
 	sgl::StefanPhysics::terminate();
