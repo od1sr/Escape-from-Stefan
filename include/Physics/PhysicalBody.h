@@ -20,7 +20,7 @@ namespace sgl
             btCollisionShape *collision_shape, float mass);
         glm::mat4 getModelMatrix() const;
     private:
-        PhysicalBody(PhysicalBody&figure);
+        PhysicalBody(PhysicalBody& body);
     public:
         //the collision shape won't be copied and delted by object
         PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll, btCollisionShape *collision_shape, float mass);

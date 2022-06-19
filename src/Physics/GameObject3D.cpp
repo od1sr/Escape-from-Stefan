@@ -34,13 +34,6 @@ void sgl::GameObject3D::draw(Shader &shader) const
 	model->draw(shader);
 }
 
-sgl::Model* sgl::GameObject3D::set3DModel(sgl::Model *_model)
-{
-	Model *old_model = _model;
-	model = _model;
-	return old_model;
-}
-
 sgl::GameObject3D::~GameObject3D()
 {
 }

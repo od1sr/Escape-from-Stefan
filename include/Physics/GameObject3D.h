@@ -22,7 +22,8 @@ namespace sgl
         GameObject3D(Model *model);
         GameObject3D();
         void draw(Shader &shader) const override;
-        Model* set3DModel(Model *model); //return pointer to the old model
+        inline void set3DModel(Model *model) { this->model = model; }
+        inline Model* get3DModel() const { return model; }
         ~GameObject3D();
     };
 }
