@@ -94,7 +94,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>include;D:\My\bullet3-3.21\src;D:\My\cpp\libs\lib\glad\include;D:\My\cpp\libs\include;include\Graphics;include\Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;D:\My\cpp\libs\bullet3-3.17\src;D:\My\cpp\libs\lib\glad\include;D:\My\cpp\libs\include;include\Graphics;include\Physics</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -126,7 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\My\bullet3-master\src;D:\My\cpp\libs\include;D:\My\cpp\libs\lib\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\My\cpp\libs\bullet3-3.17\src;D:\My\cpp\libs\include;D:\My\cpp\libs\lib\glad\include;include;include\Physics;include\Graphics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -193,19 +193,19 @@
     <ResourceCompile Include="Graphic Library.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\My\cpp porjects\BulletPhysics\src\BulletCollision\BulletCollision.vcxproj">
-      <Project>{96b7d2fd-57ed-30a9-ae38-84ff07e59c15}</Project>
-    </ProjectReference>
-    <ProjectReference Include="D:\My\cpp porjects\BulletPhysics\src\BulletDynamics\BulletDynamics.vcxproj">
-      <Project>{96bee3bf-dfea-3938-a5f9-d52d57f5e3e9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="D:\My\cpp porjects\BulletPhysics\src\LinearMath\LinearMath.vcxproj">
-      <Project>{7f348ce4-e31e-35a5-ae91-1683d7891b2d}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="src\GLSL-files\fragment shader.glsl" />
     <None Include="src\GLSL-files\vertex shader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BulletPhysics\src\BulletCollision\BulletCollision.vcxproj">
+      <Project>{4d9d3bb0-efcc-3520-b0d3-44204b14f06e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\BulletPhysics\src\BulletDynamics\BulletDynamics.vcxproj">
+      <Project>{64a15f5d-5bfd-3d7c-a93f-89d09dc7cfac}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\BulletPhysics\src\LinearMath\LinearMath.vcxproj">
+      <Project>{e54028ec-6cc8-3e84-a8dc-12eaff052e3d}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
