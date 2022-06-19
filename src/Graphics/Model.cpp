@@ -22,7 +22,7 @@ Model::Model()
 {
 }
 
-void Model::loadFromFile(const char* model_path)
+void Model::loadFromFile(const char *model_path)
 {
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(model_path, aiProcess_Triangulate);
@@ -64,22 +64,19 @@ void Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	std::vector<uint> indices;
 	std::vector<Texture> textures;
 	aiMaterial *material = NULL;
-	float shininess = 0.f;
+	float shininess = 64.f;
 	if (mesh->mMaterialIndex >= 0)
 		material = scene->mMaterials[mesh->mMaterialIndex];
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
-		// Обрабатываем координаты вершин, нормали и текстурные координаты
 		vertex.pos = { mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
 		vertex.normal = { mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
 		if (mesh->mTextureCoords[0])
 			vertex.texture_pos = { mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y };
 		else
 			vertex.texture_pos = { 0.f, 0.f };
-			/*vertex.diffuse_color = vec4(
-				mesh->mColors[0][i], mesh->mColors[1][i], mesh->mColors[2][i], mesh->mColors[3][i]);*/
 		if (material)
 		{
 			aiColor4D diffuse, specular;
@@ -94,14 +91,12 @@ void Model::processMesh(aiMesh *mesh, const aiScene *scene)
 		}
 		vertices.push_back(vertex);
 	}
-	// Обрабатываем индексы
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
 	}
-	// Обрабатываем материал
 	if(material)
 	{
 		std::vector<Texture> diffuse_maps, specular_maps;
@@ -109,8 +104,11 @@ void Model::processMesh(aiMesh *mesh, const aiScene *scene)
 		textures.insert(textures.end(), diffuse_maps.begin(), diffuse_maps.end());
 		loadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::SPECULAR, specular_maps);
 		textures.insert(textures.end(), specular_maps.begin(), specular_maps.end());
-		material->Get(AI_MATKEY_SHININESS, shininess);
-		
+		if (material->Get(AI_MATKEY_SHININESS, shininess) != aiReturn_SUCCESS)
+			shininess = 64.f;
+		else if (!shininess)
+			shininess = 1;
+
 	}
 	Mesh *m = new Mesh(vertices, textures, indices);
 	m->shininess = (int)shininess;
