@@ -12,6 +12,7 @@
 #include "GLFW/glfw3.h"
 #include "BoundedPlane.h"
 #include "GameObject3D.h"
+#include "IDrawable.h"
 
 namespace sgl
 {
@@ -32,7 +33,6 @@ namespace sgl
 		static ProjectLight flashlight;
 		static DirectionalLight directional_light;
 		static BoundedPlane *plane;
-		static BoundedPlane *plane2;
 		static GameObject3D *car;
 
 		static void moveCamera();
@@ -43,6 +43,7 @@ namespace sgl
 		static void init(const char *window_name, int win_width, int win_height);
 		static void mainLoop();
 		static void terminate();
+		static void addObject(IDrawable *object);
 	};
 }
 #endif // ! _STEFAN_GRAPHICS_H_

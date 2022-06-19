@@ -14,12 +14,14 @@ void clear_gl_errors()
 	}
 }
 
-void check_gl_errors(const char* function_name, const char* filename, int line)
+void check_gl_errors(const char *function_name, const char *filename, int line)
 {
 	while (GLenum error = glGetError())
 	{
-		save_error_log(std::string("[Opengl error] (") + std::to_string(error) + std::string(") <in ") +
-			function_name + " in file " + filename + " at line " + std::to_string(line) + ">");
+		int log_len = 1024;
+		char *log = new char[log_len];
+		sprintf_s(log, log_len, "[Opengl error] (%d) <in %s in file %s at line %d>", 
+			error, function_name, filename, line);
 #ifdef _DEBUG
 		__debugbreak();
 #endif
