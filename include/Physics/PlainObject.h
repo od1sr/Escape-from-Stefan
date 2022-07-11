@@ -48,6 +48,7 @@ namespace sgl
         glm::vec4 getDiffuseColor() const;
         glm::vec4 getSpecularColor() const;
         void setTexture(const Texture &diffuse_texture, const Texture &specular_texture);
+        objectID getObjectID() const override;
         ~PlainObject();
     };
 }

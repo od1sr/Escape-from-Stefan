@@ -154,6 +154,7 @@
     <ClCompile Include="src\Graphics\ProjectLight.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\StefanGraphics.cpp" />
+    <ClCompile Include="src\Physics\Player.cpp" />
     <ClCompile Include="src\Physics\StefanPhysics.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\VAO.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="include\Physics\PlainObject.h" />
     <ClInclude Include="include\Graphics\PointLight.h" />
     <ClInclude Include="include\Graphics\ProjectLight.h" />
+    <ClInclude Include="include\Physics\Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="include\Graphics\Shader.h" />

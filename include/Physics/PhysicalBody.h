@@ -7,6 +7,7 @@
 #include "glm/vec4.hpp"
 #include "ITransformable.h"
 #include "btBulletCollisionCommon.h"
+#include "config.h"
 
 namespace sgl
 {
@@ -14,16 +15,17 @@ namespace sgl
         public ITransformable
     {
     protected:
-        btRigidBody *rigid_body;
 
         void initRigidBody(float x, float y, float z, float pitch, float yaw, float roll, 
             btCollisionShape *collision_shape, float mass);
         glm::mat4 getModelMatrix() const;
+        virtual void update() override;
     private:
         PhysicalBody(PhysicalBody& body);
     public:
         //the collision shape won't be copied and delted by object
-        PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll, btCollisionShape *collision_shape, float mass);
+        PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll, 
+            btCollisionShape *collision_shape, float mass);
         PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll);
         PhysicalBody(float x, float y, float z);
         PhysicalBody();
@@ -34,6 +36,7 @@ namespace sgl
         virtual glm::vec3 getRotation() const override;
         float getMass() const override;
         void setMass(float m) override;
+        inline objectID getObjectID() const override { return objectID::PHYSICAL_BODY; }
         ~PhysicalBody();
     };
 }

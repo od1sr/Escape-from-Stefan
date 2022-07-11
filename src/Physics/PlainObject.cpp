@@ -105,6 +105,11 @@ void sgl::PlainObject::setTexture(const Texture &_diffuse_texture, const Texture
 	*specular_texture = _specular_texture;
 }
 
+objectID sgl::PlainObject::getObjectID() const
+{
+	return (objectID)(PhysicalBody::getObjectID() | objectID::BOUNDED_PLANE);
+}
+
 sgl::PlainObject::~PlainObject()
 {
 	if (diffuse_texture)

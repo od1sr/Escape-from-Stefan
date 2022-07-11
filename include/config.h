@@ -13,5 +13,15 @@ const int VERTEX_ATTRIBUTE_NUMBER = COORDINATE_DIMENSIONS + TEXTURE_COORDINATE_D
 enum vertexAttributeIndices {COORDINATES, TEX_COORD, SURFACE_NORMAL, COLOR_DIFFUSE, COLOR_SPECULAR};
 const btVector3 WORLD_GRAVITY(0, -9.80665, 0);
 const int triangle_corners_per_square = 6;
+const float CAMERA_RELATIVE_SHIFT = 0.95;
+enum objectID {
+	PHYSICAL_BODY = 0b1,
+	BOUNDED_PLANE = 0b10, 
+	GAME_OBJECT_3D = 0b100, 
+	PLAYER = 0b1000
+};
+const float PLAYER_SPEED = 10.f;
+const float MOUSE_SESETIVITY = 0.001f;
+const float PLAYER_JUMP_VELOCTY = 15.f;
 
 #endif // !_BASIC_GAME_CONSTANTS_H_

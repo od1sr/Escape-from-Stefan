@@ -24,6 +24,8 @@ namespace sgl
         void draw(Shader &shader) const override;
         inline void set3DModel(Model *model) { this->model = model; }
         inline Model* get3DModel() const { return model; }
+        inline objectID getObjectID() const override 
+        { return objectID::GAME_OBJECT_3D; }
         ~GameObject3D();
     };
 }

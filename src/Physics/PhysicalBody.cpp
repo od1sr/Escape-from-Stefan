@@ -25,7 +25,6 @@ void sgl::PhysicalBody::initRigidBody(float x, float y, float z, float pitch, fl
 	rigid_body = new btRigidBody(rb_info);
 	rigid_body->setCollisionFlags(rigid_body->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 	rigid_body->setUserPointer(this);
-	StefanPhysics::addRigidBody(rigid_body);
 }
 
 sgl::PhysicalBody::PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll)
@@ -107,6 +106,10 @@ glm::mat4 sgl::PhysicalBody::getModelMatrix() const
 	transform.getOpenGLMatrix((float*)mat_vector);
 	return glm::mat4(mat_vector[0], mat_vector[1],
 		mat_vector[2], mat_vector[3]);
+}
+
+void sgl::PhysicalBody::update()
+{
 }
 
 sgl::PhysicalBody::~PhysicalBody()
