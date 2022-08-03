@@ -32,8 +32,8 @@ int main()
 	plane = new sgl::BoundedPlane(settings);
 	sgl::StefanGraphics::addObject(plane);
 	car = new sgl::GameObject3D(
-		0.f, 500.f, -20.f, 0.f, 0.f, 0.f,
-		new btBoxShape(btVector3(5.f, 2.5f, 5.f)), 2000.f,
+		0.f, 10.f, -20.f, 0.f, 0.f, 0.f,
+		new btBoxShape(btVector3(8.f, 5.f, 10.f)), 2000.f,
 		new sgl::Model("assets\\3d models\\lada\\source\\Wavefront\\testtt.obj")
 	);
 	sgl::StefanGraphics::addObject(car);
@@ -61,14 +61,16 @@ void cursorMovementCallback(float d_x, float d_y, void *player)
 
 void keyboardHandler(sgl::Player *player)
 {
+	char x_moving_direction = 0, z_moving_direction = 0;
 	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_W))
-		player->moveDirectionaly(1, 0);
+		z_moving_direction += 1;
 	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_S))
-		player->moveDirectionaly(-1, 0);
+		z_moving_direction -= 1;
 	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_D))
-		player->moveDirectionaly(0, 1);
+		x_moving_direction += 1;
 	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_A))
-		player->moveDirectionaly(0, -1);
+		x_moving_direction -= 1;
+	player->setWalking(x_moving_direction, z_moving_direction);
 	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_SPACE))
 		player->tryToJump();
 	glm::vec3 pos = player->getCoordinates();

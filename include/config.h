@@ -20,7 +20,7 @@ enum objectID {
 	GAME_OBJECT_3D = 0b100, 
 	PLAYER = 0b1000
 };
-const float PLAYER_SPEED = 10.f;
+const float PLAYER_SPEED = 0.6f;
 const float MOUSE_SESETIVITY = 0.001f;
 const float PLAYER_JUMP_VELOCTY = 15.f;
 

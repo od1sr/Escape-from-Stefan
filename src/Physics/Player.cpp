@@ -15,9 +15,10 @@ sgl::Player::Player(PlayerSettings &settings)
 	btCollisionShape *collision_shape = new btCapsuleShape(settings.radius, settings.height);
 	initRigidBody(settings.position.x, settings.position.y, settings.position.z, 0.f, 0.f, 0.f,
 		collision_shape, settings.mass);
+	rigid_body->setCollisionFlags(rigid_body->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+	rigid_body->setActivationState(DISABLE_DEACTIVATION);
 	rigid_body->setAngularFactor(btVector3(0.f, 0.f, 0.f));
 	is_standing = false;
-	current_x_walking = current_z_walking = 0;
 	current_walking_velocity = btVector3(0.f, 0.f, 0.f);
 }
 
@@ -28,12 +29,6 @@ void sgl::Player::update()
 	glm::vec3 pos = glm::vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z()) + 
 		CAMERA_SHIFT(height);
 	camera->setPosition(pos);
-	if (current_x_walking || current_z_walking)
-	{
-		current_x_walking = current_z_walking = 0;
-		rigid_body->setLinearVelocity(rigid_body->getLinearVelocity() - current_walking_velocity);
-		current_walking_velocity.setValue(0.f, 0.f, 0.f);
-	}
 }
 
 void sgl::Player::rotateCamera(float yaw, float pitch)
@@ -46,41 +41,24 @@ objectID sgl::Player::getObjectID() const
 	return (objectID)(PhysicalBody::getObjectID() | objectID::PLAYER);
 }
 
-void sgl::Player::moveDirectionaly(char x_direction, char z_direction)
+void sgl::Player::setWalking(char x_direction, char z_direction)
 {
-	btTransform transform;
-	rigid_body->getMotionState()->getWorldTransform(transform);
-	glm::vec3 pos(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
-	glm::vec3 first_cam_pos = pos + CAMERA_SHIFT(height);
-	camera->setPosition(first_cam_pos);
-	if (x_direction != 0)
-	{
-		if (current_x_walking == x_direction)
-		{
-			if (current_z_walking == z_direction)
-				return;
-		}
-		else
-			camera->directionalMovement(sgl::straight, x_direction);
-	}
-	if (z_direction != 0)
-	{
-		if (current_z_walking == z_direction)
-		{
-			if (current_x_walking == x_direction)
-				return;
-		}
-		else
-			camera->directionalMovement(sgl::right, z_direction);
-	}
-	current_x_walking = x_direction;
-	current_z_walking = z_direction;
-	glm::vec3 cam_pos = camera->getPos();
-	btVector3 new_pos(cam_pos.x, transform.getOrigin().y(), cam_pos.z);
-	current_walking_velocity = (new_pos - transform.getOrigin()).normalize() * PLAYER_SPEED;
-	current_walking_velocity.setY(0);
-	rigid_body->setLinearVelocity(rigid_body->getLinearVelocity() + current_walking_velocity);
-	camera->setPosition(first_cam_pos);
+	// player is staying put and function is called to move him nowhere
+	if ((!x_direction) && (!z_direction))
+		return;
+	glm::vec3 walk_vector = camera->getDirection();
+	walk_vector.y = 0;
+	walk_vector = glm::normalize(walk_vector);
+	glm::vec3 camera_right = walk_vector;
+	camera_right.x = -walk_vector.z;
+	camera_right.z = walk_vector.x;
+	walk_vector *= (float)z_direction;
+	camera_right *= (float)x_direction;
+	walk_vector = !z_direction && !x_direction ? glm::vec3(0.f) : (glm::normalize(walk_vector+camera_right) * PLAYER_SPEED);
+	btTransform transform = rigid_body->getWorldTransform();
+	transform.getOrigin().setX(transform.getOrigin().x() + walk_vector.x);
+	transform.getOrigin().setZ(transform.getOrigin().z() + walk_vector.z);
+	rigid_body->setWorldTransform(transform);
 }
 
 bool sgl::Player::tryToJump()
