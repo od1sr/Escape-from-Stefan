@@ -15,7 +15,8 @@ sgl::Player::Player(PlayerSettings &settings)
 	btCollisionShape *collision_shape = new btCapsuleShape(settings.radius, settings.height);
 	initRigidBody(settings.position.x, settings.position.y, settings.position.z, 0.f, 0.f, 0.f,
 		collision_shape, settings.mass);
-	rigid_body->setCollisionFlags(rigid_body->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+	rigid_body->setCollisionFlags(rigid_body->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK | 
+		btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 	rigid_body->setActivationState(DISABLE_DEACTIVATION);
 	rigid_body->setAngularFactor(btVector3(0.f, 0.f, 0.f));
 	is_standing = false;
@@ -54,7 +55,8 @@ void sgl::Player::setWalking(char x_direction, char z_direction)
 	camera_right.z = walk_vector.x;
 	walk_vector *= (float)z_direction;
 	camera_right *= (float)x_direction;
-	walk_vector = !z_direction && !x_direction ? glm::vec3(0.f) : (glm::normalize(walk_vector+camera_right) * PLAYER_SPEED);
+	walk_vector = !z_direction && !x_direction ? glm::vec3(0.f) : (glm::normalize(walk_vector+camera_right) * 
+		(is_standing ? PLAYER_SPEED : PLAYER_SPEED_WHEN_JUMPING));
 	btTransform transform = rigid_body->getWorldTransform();
 	transform.getOrigin().setX(transform.getOrigin().x() + walk_vector.x);
 	transform.getOrigin().setZ(transform.getOrigin().z() + walk_vector.z);

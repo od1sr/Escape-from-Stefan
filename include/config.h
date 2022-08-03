@@ -21,6 +21,7 @@ enum objectID {
 	PLAYER = 0b1000
 };
 const float PLAYER_SPEED = 0.6f;
+const float PLAYER_SPEED_WHEN_JUMPING = 0.2f;
 const float MOUSE_SESETIVITY = 0.001f;
 const float PLAYER_JUMP_VELOCTY = 15.f;
 

@@ -23,7 +23,6 @@ void sgl::PhysicalBody::initRigidBody(float x, float y, float z, float pitch, fl
 	btDefaultMotionState *motion_state = new btDefaultMotionState(transform);
 	btRigidBody::btRigidBodyConstructionInfo rb_info(mass, motion_state, collision_shape, local_inertia);
 	rigid_body = new btRigidBody(rb_info);
-	rigid_body->setCollisionFlags(rigid_body->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 	rigid_body->setUserPointer(this);
 }
 
