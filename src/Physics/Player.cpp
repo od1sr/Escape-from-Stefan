@@ -20,7 +20,6 @@ sgl::Player::Player(PlayerSettings &settings)
 	rigid_body->setActivationState(DISABLE_DEACTIVATION);
 	rigid_body->setAngularFactor(btVector3(0.f, 0.f, 0.f));
 	is_standing = false;
-	current_walking_velocity = btVector3(0.f, 0.f, 0.f);
 }
 
 void sgl::Player::update()

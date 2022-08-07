@@ -25,7 +25,6 @@ namespace sgl
 		CameraFPS *camera;
 		float height;
 		bool is_standing; // on the ground
-		btVector3 current_walking_velocity;
 
 	public:
 		Player(PlayerSettings &settings);
