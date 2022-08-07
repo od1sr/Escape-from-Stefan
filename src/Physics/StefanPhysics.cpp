@@ -31,14 +31,7 @@ bool sgl::StefanPhysics::collideCallbackHandler(btManifoldPoint &cp, const btCol
     }
     if (player != NULL)
     {
-        glm::vec3 player_pos_glm = player->getCoordinates();
-        btVector3 player_pos(player_pos_glm.x, player_pos_glm.y, player_pos_glm.z);
-        float half_player_height = ((btCapsuleShape*)player->rigid_body->getCollisionShape())->getHalfHeight();
-        btVector3 from = player_pos + btVector3(0.f, -half_player_height, 0.f);
-        btVector3 ray = btVector3(0.f, -0.0001f, 0.f);
-        btCollisionWorld::ClosestRayResultCallback callback(from, ray);
-        world->rayTest(from, ray, callback);
-        if (callback.hasHit())
+        if (abs(cp.m_normalWorldOnB.y()) > sin(MIN_ANGLE_OF_SURFACE_TO_JUMP))
             player->is_standing = true;
     }
     return false;

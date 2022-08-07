@@ -1,6 +1,9 @@
 #ifndef _BASIC_GAME_CONSTANTS_H_
 #define _BASIC_GAME_CONSTANTS_H_
 
+#define _USE_MATH_DEFINES
+
+#include <math.h>
 #include "btBulletDynamicsCommon.h"
 
 const int COORDINATE_DIMENSIONS = 3;
@@ -24,5 +27,6 @@ const float PLAYER_SPEED = 0.6f;
 const float PLAYER_SPEED_WHEN_JUMPING = 0.2f;
 const float MOUSE_SESETIVITY = 0.001f;
 const float PLAYER_JUMP_VELOCTY = 15.f;
+const float MIN_ANGLE_OF_SURFACE_TO_JUMP = M_PI / 4.f; // 45 degrees
 
 #endif // !_BASIC_GAME_CONSTANTS_H_
