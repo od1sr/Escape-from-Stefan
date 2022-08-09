@@ -29,10 +29,10 @@ bool sgl::StefanPhysics::collideCallbackHandler(btManifoldPoint &cp, const btCol
         player = (Player*)obj2;
         other_object = obj1;
     }
-    if (player != NULL)
+    if (player != NULL && !player->is_standing)
     {
         if (abs(cp.m_normalWorldOnB.y()) > sin(MIN_ANGLE_OF_SURFACE_TO_JUMP))
-            player->is_standing = true;
+            player->setAsGrounded();
     }
     return false;
 }

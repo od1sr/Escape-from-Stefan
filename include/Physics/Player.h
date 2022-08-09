@@ -3,6 +3,8 @@
 
 #include "PhysicalBody.h"
 #include "CameraFPS.h"
+#include <chrono>
+
 
 namespace sgl
 {
@@ -25,7 +27,9 @@ namespace sgl
 		CameraFPS *camera;
 		float height;
 		bool is_standing; // on the ground
+		std::chrono::milliseconds last_landing_time; 
 
+		void setAsGrounded();
 	public:
 		Player(PlayerSettings &settings);
 		void update() override;

@@ -2,8 +2,10 @@
 #include "btBulletCollisionCommon.h"
 #include "btBulletDynamicsCommon.h"
 #include "config.h"
+#include <cmath>
 
 #define CAMERA_SHIFT(height) glm::vec3(0.f, (height)*CAMERA_RELATIVE_SHIFT/2.f, 0.f)
+
 
 sgl::Player::Player(PlayerSettings &settings)
 {
@@ -29,6 +31,20 @@ void sgl::Player::update()
 	glm::vec3 pos = glm::vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z()) + 
 		CAMERA_SHIFT(height);
 	camera->setPosition(pos);
+	if (rigid_body->getLinearVelocity().y() <=- 0.006f)
+		is_standing = false;
+	if (is_standing && last_landing_time.count())
+	{
+		std::chrono::milliseconds now = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch());
+		double time_from_grounding = (double)(now - last_landing_time).count();
+		if (time_from_grounding > PERIOD_OF_REST_AFTER_JUMP)
+			time_from_grounding = PERIOD_OF_REST_AFTER_JUMP;
+		double cos_prod = cos((time_from_grounding / PERIOD_OF_REST_AFTER_JUMP) * (M_PI) - M_PI / 2);
+		std::cout << cos_prod << '\t' << time_from_grounding  << std::endl;
+		pos.y -= cos_prod * height * PLAYER_CAM_DOWN_SHIFT_AFTER_GROUNDING;
+		camera->setPosition(pos);
+	}
 }
 
 void sgl::Player::rotateCamera(float yaw, float pitch)
@@ -56,6 +72,17 @@ void sgl::Player::setWalking(char x_direction, char z_direction)
 	camera_right *= (float)x_direction;
 	walk_vector = !z_direction && !x_direction ? glm::vec3(0.f) : (glm::normalize(walk_vector+camera_right) * 
 		(is_standing ? PLAYER_SPEED : PLAYER_SPEED_WHEN_JUMPING));
+	if (last_landing_time.count())
+	{
+		std::chrono::milliseconds now = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch());
+		walk_vector *= sin((
+			fmax(
+				fmin((now - last_landing_time).count(), PERIOD_OF_REST_AFTER_JUMP), 
+				PERIOD_OF_REST_AFTER_JUMP / 4.f
+			) / PERIOD_OF_REST_AFTER_JUMP
+		) * M_PI / 2.f);
+	}
 	btTransform transform = rigid_body->getWorldTransform();
 	transform.getOrigin().setX(transform.getOrigin().x() + walk_vector.x);
 	transform.getOrigin().setZ(transform.getOrigin().z() + walk_vector.z);
@@ -69,6 +96,15 @@ bool sgl::Player::tryToJump()
 	rigid_body->setLinearVelocity(btVector3(0.f, PLAYER_JUMP_VELOCTY, 0.f));
 	is_standing = false;
 	return true;
+}
+
+void sgl::Player::setAsGrounded()
+{
+	if (is_standing)
+		return;
+	is_standing = true;
+	last_landing_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+		std::chrono::system_clock::now().time_since_epoch());
 }
 
 sgl::Player::~Player()
