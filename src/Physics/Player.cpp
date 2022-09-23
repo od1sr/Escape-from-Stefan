@@ -41,7 +41,6 @@ void sgl::Player::update()
 		if (time_from_grounding > PERIOD_OF_REST_AFTER_JUMP)
 			time_from_grounding = PERIOD_OF_REST_AFTER_JUMP;
 		double cos_prod = cos((time_from_grounding / PERIOD_OF_REST_AFTER_JUMP) * (M_PI) - M_PI / 2);
-		std::cout << cos_prod << '\t' << time_from_grounding  << std::endl;
 		pos.y -= cos_prod * height * PLAYER_CAM_DOWN_SHIFT_AFTER_GROUNDING;
 		camera->setPosition(pos);
 	}

@@ -12,7 +12,10 @@ int main()
 	sgl::BoundedPlane *plane;
 	sgl::GameObject3D *car;
 	sgl::Player *player;
-	sgl::PlayerSettings p_set{ glm::vec3(10.f, 100.f, -10.f), 1.f, 7.5f, 100.f, glm::vec3(0.f, 1.f, 5.f)};
+	sgl::PlayerSettings p_set{
+		glm::vec3(10.f, 5.f, -10.f), 
+		1.f, 7.5f, 10000.f, glm::vec3(0.f, 1.f, 5.f)
+	};
 	player = new sgl::Player(p_set);
 	sgl::StefanPhysics::init();
 	sgl::StefanGraphics::init("Minesraft", player->getCamera());
@@ -73,5 +76,4 @@ void keyboardHandler(sgl::Player *player)
 	player->setWalking(x_moving_direction, z_moving_direction);
 	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_SPACE))
 		player->tryToJump();
-	glm::vec3 pos = player->getCoordinates();
 }

@@ -26,7 +26,7 @@ enum objectID {
 const float PLAYER_SPEED = 0.6f;
 const float PLAYER_SPEED_WHEN_JUMPING = 0.2f;
 const float MOUSE_SESETIVITY = 0.001f;
-const float PLAYER_JUMP_VELOCTY = 15.f;
+const float PLAYER_JUMP_VELOCTY = 10.f;
 const float MIN_ANGLE_OF_SURFACE_TO_JUMP = M_PI / 4.f; // 45 degrees
 const float PERIOD_OF_REST_AFTER_JUMP = 1500.f; // milliseconds
 const float PLAYER_CAM_DOWN_SHIFT_AFTER_GROUNDING = 0.1f;
