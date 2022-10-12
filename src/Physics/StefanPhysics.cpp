@@ -17,23 +17,8 @@ bool sgl::StefanPhysics::collideCallbackHandler(btManifoldPoint &cp, const btCol
 {
     ITransformable *obj1 = (ITransformable*)colObj0Wrap->getCollisionObject()->getUserPointer();
     ITransformable *obj2 = (ITransformable*)colObj1Wrap->getCollisionObject()->getUserPointer();
-    Player *player = NULL;
-    ITransformable *other_object = NULL;
-    if (obj1->getObjectID() & objectID::PLAYER)
-    {
-        player = (Player*)obj1;
-        other_object = obj2;
-    }
-    else if (obj2->getObjectID() & objectID::PLAYER)
-    {
-        player = (Player*)obj2;
-        other_object = obj1;
-    }
-    if (player != NULL && !player->is_standing)
-    {
-        if (abs(cp.m_normalWorldOnB.y()) > sin(MIN_ANGLE_OF_SURFACE_TO_JUMP))
-            player->setAsGrounded();
-    }
+    obj1->collideCallback(obj2, cp);
+    obj2->collideCallback(obj1, cp);
     return false;
 }
 
@@ -47,7 +32,6 @@ void StefanPhysics::init()
     world->setGravity(WORLD_GRAVITY);
     gContactAddedCallback = collideCallbackHandler;
 }
-
 
 void sgl::StefanPhysics::stepSimulation()
 {
@@ -74,4 +58,9 @@ void StefanPhysics::terminate()
     delete collision_configuration;
     delete dispatcher;
     delete solver;
+}
+
+void sgl::StefanPhysics::rayTest(btCollisionWorld::ClosestRayResultCallback &raytest_callback)
+{
+    world->rayTest(raytest_callback.m_rayFromWorld, raytest_callback.m_rayToWorld, raytest_callback);
 }

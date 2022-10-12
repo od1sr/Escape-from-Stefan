@@ -20,8 +20,9 @@ namespace sgl
             btCollisionShape *collision_shape, float mass);
         glm::mat4 getModelMatrix() const;
         virtual void update() override;
+        virtual void collideCallback(ITransformable *other, btManifoldPoint &cp) override;
     private:
-        PhysicalBody(PhysicalBody& body);
+        PhysicalBody(PhysicalBody &body);
     public:
         //the collision shape won't be copied and delted by object
         PhysicalBody(float x, float y, float z, float pitch, float yaw, float roll, 

@@ -29,6 +29,7 @@ namespace sgl
 		bool is_standing; // on the ground
 		std::chrono::milliseconds last_landing_time; 
 
+		void collideCallback(ITransformable *other, btManifoldPoint &cp) override;
 		void setAsGrounded();
 	public:
 		Player(PlayerSettings &settings);
@@ -39,6 +40,7 @@ namespace sgl
 		// 1 means walk straight along axis, 0 - stay put along axis, -1 - walk bakwards along axis
 		void setWalking(char x_direction= 0, char z_direction= 0); 
 		bool tryToJump(); // return true if jumped else false
+		void hitByEnemy(int damage);
 		~Player();
 	};
 }

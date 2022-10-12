@@ -31,6 +31,12 @@
     <Filter Include="Файлы заголовков\Other">
       <UniqueIdentifier>{3f142d31-536e-4e1f-8e7d-cc1fb2f7a23e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Game">
+      <UniqueIdentifier>{a2b50cc1-e943-42c1-8935-048607f9f046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Game">
+      <UniqueIdentifier>{d6ba7373-729d-42db-a60e-803c663517c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\CameraFPS.cpp">
@@ -92,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="src\Physics\Player.cpp">
       <Filter>Исходные файлы\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Enemy.cpp">
+      <Filter>Исходные файлы\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="include\Physics\Player.h">
       <Filter>Файлы заголовков\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\Enemy.h">
+      <Filter>Файлы заголовков\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

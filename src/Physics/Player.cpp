@@ -97,6 +97,12 @@ bool sgl::Player::tryToJump()
 	return true;
 }
 
+void sgl::Player::collideCallback(ITransformable *other, btManifoldPoint &cp)
+{
+	if (abs(cp.m_normalWorldOnB.y()) > sin(MIN_ANGLE_OF_SURFACE_TO_JUMP))
+		setAsGrounded();
+}
+
 void sgl::Player::setAsGrounded()
 {
 	if (is_standing)
@@ -104,6 +110,10 @@ void sgl::Player::setAsGrounded()
 	is_standing = true;
 	last_landing_time = std::chrono::duration_cast<std::chrono::milliseconds>(
 		std::chrono::system_clock::now().time_since_epoch());
+}
+
+void sgl::Player::hitByEnemy(int damage)
+{
 }
 
 sgl::Player::~Player()

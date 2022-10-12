@@ -82,7 +82,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\admin\Desktop\bullet3-master\src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\admin\Desktop\bullet3-master\src;;include/GAME</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -94,7 +94,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>include;D:\My\cpp\libs\bullet3-3.17\src;D:\My\cpp\libs\lib\glad\include;D:\My\cpp\libs\include;include\Graphics;include\Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;D:\My\cpp\libs\bullet3-3.17\src;D:\My\cpp\libs\lib\glad\include;D:\My\cpp\libs\include;include\Graphics;include\Physics;include/GAME</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\admin\Desktop\bullet3-master\src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\admin\Desktop\bullet3-master\src;;include/GAME</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,7 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\My\cpp\libs\bullet3-3.17\src;D:\My\cpp\libs\include;D:\My\cpp\libs\lib\glad\include;include;include\Physics;include\Graphics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\My\cpp\libs\bullet3-3.17\src;D:\My\cpp\libs\include;D:\My\cpp\libs\lib\glad\include;include;include\Physics;include\Graphics;include/GAME</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Enemy.cpp" />
     <ClCompile Include="src\Graphics\CameraFPS.cpp" />
     <ClCompile Include="src\Graphics\DirectionalLight.cpp" />
     <ClCompile Include="src\glad.c" />
@@ -161,6 +162,7 @@
     <ClCompile Include="src\Physics\PhysicalBody.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Game\Enemy.h" />
     <ClInclude Include="include\Graphics\IDrawable.h" />
     <ClInclude Include="include\Graphics\CameraFPS.h" />
     <ClInclude Include="include\config.h" />

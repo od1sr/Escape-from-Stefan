@@ -111,6 +111,10 @@ void sgl::PhysicalBody::update()
 {
 }
 
+void sgl::PhysicalBody::collideCallback(ITransformable *other, btManifoldPoint &cp)
+{
+}
+
 sgl::PhysicalBody::~PhysicalBody()
 {
 	StefanPhysics::removeCollisonObject(rigid_body);

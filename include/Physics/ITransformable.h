@@ -7,6 +7,7 @@
 namespace sgl
 {
     class StefanPhysics;
+
     class ITransformable
     {
         friend class StefanPhysics;
@@ -14,6 +15,7 @@ namespace sgl
         btRigidBody *rigid_body;
 
         virtual void update() = 0;
+        virtual void collideCallback(ITransformable *other, btManifoldPoint &cp) = 0;
     public:
         virtual void move(float dx, float dy, float dz) = 0;
         virtual void setCoordinates(float x, float y, float z) = 0;

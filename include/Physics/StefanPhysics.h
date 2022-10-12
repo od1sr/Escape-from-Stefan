@@ -26,6 +26,7 @@ namespace sgl
 		static void stepSimulation();
 		static void removeCollisonObject(btCollisionObject *body);
 		static void terminate();
+		static void rayTest(btCollisionWorld::ClosestRayResultCallback &raytest_callback);
 	};
 }
 
