@@ -17,11 +17,11 @@ sgl::Player::Player(PlayerSettings &settings)
 	btCollisionShape *collision_shape = new btCapsuleShape(settings.radius, settings.height);
 	initRigidBody(settings.position.x, settings.position.y, settings.position.z, 0.f, 0.f, 0.f,
 		collision_shape, settings.mass);
-	rigid_body->setCollisionFlags(rigid_body->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK | 
-		btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+	rigid_body->setCollisionFlags(rigid_body->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 	rigid_body->setActivationState(DISABLE_DEACTIVATION);
 	rigid_body->setAngularFactor(btVector3(0.f, 0.f, 0.f));
 	is_standing = false;
+	hp = settings.health_points;
 }
 
 void sgl::Player::update()
@@ -114,6 +114,7 @@ void sgl::Player::setAsGrounded()
 
 void sgl::Player::hitByEnemy(int damage)
 {
+	hp -= damage;
 }
 
 sgl::Player::~Player()

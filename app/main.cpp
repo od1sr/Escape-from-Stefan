@@ -3,19 +3,26 @@
 #include "BoundedPlane.h"
 #include "Texture.h"
 #include "Player.h"
+#include <cstdlib>
+#include <iostream>
+#include <ctime>
 
 void cursorMovementCallback(float d_x, float d_y, void *player);
 void keyboardHandler(sgl::Player* player);
 
 int main()
 {
+	std::srand(std::time(nullptr));
 	sgl::BoundedPlane *plane;
 	sgl::GameObject3D *car;
 	sgl::Player *player;
-	sgl::PlayerSettings p_set{
-		glm::vec3(10.f, 5.f, -10.f), 
-		1.f, 7.5f, 10000.f, glm::vec3(0.f, 1.f, 5.f)
-	};
+	sgl::PlayerSettings p_set;
+	p_set.position = glm::vec3(10.f, 5.f, -10.f);
+	p_set.radius = 1.f;
+	p_set.height = 7.5f;
+	p_set.mass = 10000.f; 
+	p_set.view_direction = glm::vec3(0.f, 1.f, 5.f);
+	p_set.health_points = 100;
 	player = new sgl::Player(p_set);
 	sgl::StefanPhysics::init();
 	sgl::StefanGraphics::init("Minesraft", player->getCamera());

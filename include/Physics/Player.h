@@ -18,16 +18,17 @@ namespace sgl
 		float radius, height;
 		float mass;
 		glm::vec3 view_direction;
+		int health_points;
 	};
 
 	class Player : public PhysicalBody
 	{
-		friend class StefanPhysics;
 	private:
 		CameraFPS *camera;
 		float height;
 		bool is_standing; // on the ground
 		std::chrono::milliseconds last_landing_time; 
+		int hp;
 
 		void collideCallback(ITransformable *other, btManifoldPoint &cp) override;
 		void setAsGrounded();

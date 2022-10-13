@@ -21,7 +21,8 @@ enum objectID {
 	PHYSICAL_BODY = 0b1,
 	BOUNDED_PLANE = 0b10, 
 	GAME_OBJECT_3D = 0b100, 
-	PLAYER = 0b1000
+	PLAYER = 0b1000,
+	ENEMY = 0b10000
 };
 const float PLAYER_SPEED = 0.6f;
 const float PLAYER_SPEED_WHEN_JUMPING = 0.2f;
@@ -31,4 +32,8 @@ const float MIN_ANGLE_OF_SURFACE_TO_JUMP = M_PI / 4.f; // 45 degrees
 const float PERIOD_OF_REST_AFTER_JUMP = 1500.f; // milliseconds
 const float PLAYER_CAM_DOWN_SHIFT_AFTER_GROUNDING = 0.1f;
 
+const float ENEMYS_FOV = M_PI / 3.f; // 60 deg.
+const float HALF_FOV = ENEMYS_FOV / 2.f;
+const float ENEMYS_MAX_VIEW_DIST = 30.f;
+const int   ENEMYS_KILL_DEATH_RATIO = 10000;
 #endif // !_BASIC_GAME_CONSTANTS_H_
