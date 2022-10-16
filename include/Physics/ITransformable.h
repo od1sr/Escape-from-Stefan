@@ -14,7 +14,7 @@ namespace sgl
     protected:
         btRigidBody *rigid_body;
 
-        virtual void update() = 0;
+        virtual void update(float time_passed_since_last_update) = 0; //seconds
         virtual void collideCallback(ITransformable *other, btManifoldPoint &cp) = 0;
     public:
         virtual void move(float dx, float dy, float dz) = 0;

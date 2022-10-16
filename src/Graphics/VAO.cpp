@@ -50,8 +50,6 @@ void VAO::use() const
 {
 	GL_CALL(glBindVertexArray(0));
 	GL_CALL(glBindVertexArray(Vao));
-	/*glBindBuffer(GL_ARRAY_BUFFER, VBOs[current_buffer_index]);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[current_buffer_index]);*/
 }
 
 void VAO::setVertexAttribPointer(int layout_pos, int elem_num, int type, 

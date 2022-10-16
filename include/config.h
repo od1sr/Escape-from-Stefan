@@ -19,13 +19,14 @@ const int triangle_corners_per_square = 6;
 const float CAMERA_RELATIVE_SHIFT = 0.95;
 enum objectID {
 	PHYSICAL_BODY = 0b1,
-	BOUNDED_PLANE = 0b10, 
-	GAME_OBJECT_3D = 0b100, 
-	PLAYER = 0b1000,
-	ENEMY = 0b10000
+	PLAIN_OBJECT = 0b10,
+	BOUNDED_PLANE = 0b100, 
+	GAME_OBJECT_3D = 0b1000, 
+	PLAYER = 0b10000,
+	ENEMY = 0b100000
 };
-const float PLAYER_SPEED = 0.6f;
-const float PLAYER_SPEED_WHEN_JUMPING = 0.2f;
+const float PLAYER_SPEED = 6.f;
+const float PLAYER_SPEED_WHEN_JUMPING = 2.f;
 const float MOUSE_SESETIVITY = 0.001f;
 const float PLAYER_JUMP_VELOCTY = 10.f;
 const float MIN_ANGLE_OF_SURFACE_TO_JUMP = M_PI / 4.f; // 45 degrees

@@ -107,7 +107,7 @@ glm::mat4 sgl::PhysicalBody::getModelMatrix() const
 		mat_vector[2], mat_vector[3]);
 }
 
-void sgl::PhysicalBody::update()
+void sgl::PhysicalBody::update(float deltatime)
 {
 }
 

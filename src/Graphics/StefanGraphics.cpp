@@ -125,12 +125,8 @@ void StefanGraphics::createLights()
 
 bool StefanGraphics::drawScene()
 {
-	static float last_time = glfwGetTime();
-	float now = glfwGetTime();
-	float deltatime = now - last_time;
 	glm::vec3 cam_direction = cam->getDirection(), cam_pos = cam->getPos();
 	glm::mat4 view = cam->getViewMatrix();
-	last_time = now;
 	view = cam->getViewMatrix();
 	projection = glm::perspective(glm::radians(45.0f),
 		(float)screen_w / screen_h,

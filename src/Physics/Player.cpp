@@ -24,7 +24,7 @@ sgl::Player::Player(PlayerSettings &settings)
 	hp = settings.health_points;
 }
 
-void sgl::Player::update()
+void sgl::Player::update(float deltatime)
 {
 	btTransform transform;
 	rigid_body->getMotionState()->getWorldTransform(transform);
@@ -56,7 +56,7 @@ objectID sgl::Player::getObjectID() const
 	return (objectID)(PhysicalBody::getObjectID() | objectID::PLAYER);
 }
 
-void sgl::Player::setWalking(char x_direction, char z_direction)
+void sgl::Player::setWalking(float deltatime, char x_direction, char z_direction)
 {
 	// player is staying put and function is called to move him nowhere
 	if ((!x_direction) && (!z_direction))
@@ -70,7 +70,7 @@ void sgl::Player::setWalking(char x_direction, char z_direction)
 	walk_vector *= (float)z_direction;
 	camera_right *= (float)x_direction;
 	walk_vector = !z_direction && !x_direction ? glm::vec3(0.f) : (glm::normalize(walk_vector+camera_right) * 
-		(is_standing ? PLAYER_SPEED : PLAYER_SPEED_WHEN_JUMPING));
+		(is_standing ? PLAYER_SPEED : PLAYER_SPEED_WHEN_JUMPING)) * deltatime;
 	if (last_landing_time.count())
 	{
 		std::chrono::milliseconds now = std::chrono::duration_cast<std::chrono::milliseconds>(

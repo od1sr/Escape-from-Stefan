@@ -23,7 +23,7 @@ namespace sgl
 			int index0, const btCollisionObjectWrapper *colObj1Wrap, int partId1, int index1);
 		static void init();
 		static void addObject(ITransformable *object);
-		static void stepSimulation();
+		static void stepSimulation(float time_passed_since_last_simulation); // seconds
 		static void removeCollisonObject(btCollisionObject *body);
 		static void terminate();
 		static void rayTest(btCollisionWorld::ClosestRayResultCallback &raytest_callback);

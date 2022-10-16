@@ -19,7 +19,7 @@ namespace sgl
         void initRigidBody(float x, float y, float z, float pitch, float yaw, float roll, 
             btCollisionShape *collision_shape, float mass);
         glm::mat4 getModelMatrix() const;
-        virtual void update() override;
+        virtual void update(float time_passed_since_last_update) override;
         virtual void collideCallback(ITransformable *other, btManifoldPoint &cp) override;
     private:
         PhysicalBody(PhysicalBody &body);

@@ -107,7 +107,7 @@ void sgl::PlainObject::setTexture(const Texture &_diffuse_texture, const Texture
 
 objectID sgl::PlainObject::getObjectID() const
 {
-	return (objectID)(PhysicalBody::getObjectID() | objectID::BOUNDED_PLANE);
+	return (objectID)(PhysicalBody::getObjectID() | objectID::PLAIN_OBJECT);
 }
 
 sgl::PlainObject::~PlainObject()

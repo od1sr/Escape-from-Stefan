@@ -34,12 +34,12 @@ namespace sgl
 		void setAsGrounded();
 	public:
 		Player(PlayerSettings &settings);
-		void update() override;
+		void update(float time_passed_since_last_update) override;
 		void rotateCamera(float yaw, float pitch);
 		objectID getObjectID() const override;
 		inline const CameraFPS* getCamera() const { return camera; };
-		// 1 means walk straight along axis, 0 - stay put along axis, -1 - walk bakwards along axis
-		void setWalking(char x_direction= 0, char z_direction= 0); 
+		// 1 means walk straight along axis, 0 - stay put along axis, -1 - walk bakwards along axis, time_passed - seconds
+		void setWalking(float time_passed, char x_direction= 0, char z_direction= 0);
 		bool tryToJump(); // return true if jumped else false
 		void hitByEnemy(int damage);
 		~Player();

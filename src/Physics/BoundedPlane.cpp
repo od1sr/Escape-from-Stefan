@@ -112,6 +112,11 @@ void sgl::BoundedPlane::setSpecularColor(float r, float g, float b, float alpha)
 	delete[] new_specular_color_data;
 }
 
+objectID sgl::BoundedPlane::getObjectID() const
+{
+	return (objectID)(PlainObject::getObjectID() | objectID::BOUNDED_PLANE);
+}
+
 sgl::BoundedPlane::~BoundedPlane()
 {
 }

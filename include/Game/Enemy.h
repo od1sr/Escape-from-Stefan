@@ -2,7 +2,7 @@
 #define _ENEMY_CLASS_H_
 
 #include "Model.h"
-#include "PhysicalBody.h"
+#include "GameObject3D.h"
 #include "config.h"
 #include "Player.h"
 #include <chrono>
@@ -24,21 +24,20 @@ namespace sgl
 		float mass;
 	};
 
-	class Enemy : public PhysicalBody, public IDrawable
+	class Enemy : public GameObject3D
 	{
 		friend class StefanPhysics;
 	private:
 		uint hp; 
 		uint damage;
 		float speed;
-		Model *model;
 		glm::vec3 view_direction; 
 		Player *victim;
 		bool is_following_victim;
 		std::chrono::milliseconds last_hit_time;;
 
-		void tryToFollowVictimIfItIsPossible(bool has_followed_victim_recently);
-		void moveRandomlyIfNotFollowingVictim(bool has_followed_victim_recently);
+		void tryToFollowVictimIfItIsPossible(bool has_followed_victim_recently, float deltatime);
+		void moveRandomlyIfNotFollowingVictim(bool has_followed_victim_recently, float deltatime);
 		void setRandomViewDirection();
 		void checkIfKDRatioIsOver();
 		void collideCallback(ITransformable *other, btManifoldPoint &cp) override;
@@ -46,9 +45,8 @@ namespace sgl
 		Enemy(EnemySettings &settings);
 		void draw(Shader &shader) const override;
 		void hitByThePlayer(int damage_done);
-		void update() override;
+		void update(float time_passed_since_last_update) override;
 		inline objectID getObjectID() const override {return (objectID)(PhysicalBody::getObjectID() | objectID::ENEMY);}
-
 	};
 }
 

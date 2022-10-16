@@ -148,7 +148,7 @@ void Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureTyp
 
 void Model::draw(Shader &shader_program) const
 {
-	for (int i = 0; i < meshes.size(); ++i)
+	for (int i = meshes.size() - 1; i >= 0 ; --i)
 		meshes[i]->draw(shader_program);
 }
 

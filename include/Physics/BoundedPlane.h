@@ -33,6 +33,7 @@ namespace sgl
         float getLength() const;
         void setDiffuseColor(float r, float g, float b, float alpha) override;
         void setSpecularColor(float r, float g, float b, float alpha) override;
+        objectID getObjectID() const override;
         ~BoundedPlane();
     };
 }

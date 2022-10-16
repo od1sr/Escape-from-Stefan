@@ -33,11 +33,11 @@ void StefanPhysics::init()
     gContactAddedCallback = collideCallbackHandler;
 }
 
-void sgl::StefanPhysics::stepSimulation()
+void sgl::StefanPhysics::stepSimulation(float deltatime)
 {
     world->stepSimulation(1.f / 60.f, 10);
     for (int i = physical_objects.size() - 1; i >= 0; --i)
-        physical_objects[i]->update();
+        physical_objects[i]->update(deltatime);
 }
 
 void sgl::StefanPhysics::addObject(ITransformable *object)
