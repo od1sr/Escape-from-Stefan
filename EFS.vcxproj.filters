@@ -96,10 +96,10 @@
     <ClCompile Include="app\main.cpp">
       <Filter>Исходные файлы\Other</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\Player.cpp">
-      <Filter>Исходные файлы\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\Enemy.cpp">
+      <Filter>Исходные файлы\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Player.cpp">
       <Filter>Исходные файлы\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,10 +170,10 @@
     <ClInclude Include="include\Physics\ITransformable.h">
       <Filter>Файлы заголовков\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Physics\Player.h">
-      <Filter>Файлы заголовков\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="include\Game\Enemy.h">
+      <Filter>Файлы заголовков\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\Player.h">
       <Filter>Файлы заголовков\Game</Filter>
     </ClInclude>
   </ItemGroup>

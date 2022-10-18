@@ -39,7 +39,7 @@ namespace sgl
 		void tryToFollowVictimIfItIsPossible(bool has_followed_victim_recently, float deltatime);
 		void moveRandomlyIfNotFollowingVictim(bool has_followed_victim_recently, float deltatime);
 		void setRandomViewDirection();
-		void checkIfKDRatioIsOver();
+		bool checkIfKDRatioIsOver();
 		void collideCallback(ITransformable *other, btManifoldPoint &cp) override;
 	public:
 		Enemy(EnemySettings &settings);

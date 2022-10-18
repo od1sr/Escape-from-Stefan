@@ -12,7 +12,7 @@ sgl::Enemy::Enemy(EnemySettings &settings)
 	hp = settings.hp;
 	damage = settings.damage;
 	speed = settings.speed;
-	view_direction = glm::normalize(glm::vec3(settings.view_direction.x, settings.view_direction.y, 0.f));
+	view_direction = glm::normalize(glm::vec3(settings.view_direction.x, 0.f, settings.view_direction.y));
 	victim = settings.player_to_chase;
 	is_following_victim = false;
 	last_hit_time = std::chrono::milliseconds(0);
@@ -35,9 +35,9 @@ void sgl::Enemy::hitByThePlayer(int damage_done)
 void sgl::Enemy::update(float deltatime)
 {
 	checkIfKDRatioIsOver();
-	bool has_followed_victim_recently = is_following_victim;
-	tryToFollowVictimIfItIsPossible(has_followed_victim_recently, deltatime);
-	moveRandomlyIfNotFollowingVictim(has_followed_victim_recently, deltatime);
+	bool followed_victim_recently = is_following_victim;
+	tryToFollowVictimIfItIsPossible(followed_victim_recently, deltatime);
+	moveRandomlyIfNotFollowingVictim(followed_victim_recently, deltatime);
 }
 
 void sgl::Enemy::tryToFollowVictimIfItIsPossible(bool has_followed_victim_recently, float deltatime)
@@ -53,13 +53,17 @@ void sgl::Enemy::tryToFollowVictimIfItIsPossible(bool has_followed_victim_recent
 		btCollisionWorld::ClosestRayResultCallback raytest_cb(btVector3(m_pos.x, eye_level, m_pos.z),
 			btVector3(direction_to_player.x, direction_to_player.y, direction_to_player.z));
 		StefanPhysics::rayTest(raytest_cb);
-		if (is_following_victim = !raytest_cb.hasHit())
+		if (is_following_victim = raytest_cb.m_closestHitFraction >= 0.99f)
 		{
 			glm::vec3 old_vd = view_direction;
 			view_direction = glm::normalize(direction_to_player);
 			rotate(0.f, glm::angle(view_direction, old_vd), 0.f);
 			m_pos += view_direction * speed * deltatime;
-			setCoordinates(m_pos.x, m_pos.y, m_pos.z);
+			btTransform transform = rigid_body->getWorldTransform();
+			transform.getOrigin().setX(m_pos.x);
+			transform.getOrigin().setY(m_pos.y);
+			transform.getOrigin().setZ(m_pos.z);
+			rigid_body->setWorldTransform(transform);
 		}
 	}
 }
@@ -72,7 +76,10 @@ void sgl::Enemy::moveRandomlyIfNotFollowingVictim(bool has_followed_victim_recen
 	{
 		glm::vec3 m_pos = getCoordinates();
 		m_pos += view_direction * speed * deltatime;
-		setCoordinates(m_pos.x, m_pos.y, m_pos.z);
+		btTransform transform = rigid_body->getWorldTransform();
+		transform.getOrigin().setX(m_pos.x);
+		transform.getOrigin().setZ(m_pos.z);
+		rigid_body->setWorldTransform(transform);
 	}
 }
 
@@ -89,25 +96,35 @@ void sgl::Enemy::setRandomViewDirection()
 	}
 	glm::vec3 old_vd = view_direction;
 	view_direction *= std::rand() % 2 ? 1.f : -1.f;
-	rotate(0.f, glm::angle(view_direction, old_vd), 0.f);
+	if (view_direction == old_vd)
+		setRandomViewDirection();
+	else
+		rotate(0.f, glm::angle(view_direction, old_vd), 0.f);
 }
 
-void sgl::Enemy::checkIfKDRatioIsOver()
+bool sgl::Enemy::checkIfKDRatioIsOver()
 {
 	std::chrono::milliseconds now = std::chrono::duration_cast<std::chrono::milliseconds>(
 		std::chrono::system_clock::now().time_since_epoch());
+	if (!last_hit_time.count())
+		return true;
 	if (now.count() - last_hit_time.count() >= ENEMYS_KILL_DEATH_RATIO)
+	{
 		last_hit_time = std::chrono::milliseconds(0);
+		return true;
+	}
+	else
+		return false;
 }
 
 void sgl::Enemy::collideCallback(ITransformable *other, btManifoldPoint &cp)
 {
-	if (other->getObjectID() & objectID::PLAYER)
+	if (other->getObjectID() & objectID::PLAYER && checkIfKDRatioIsOver())
 	{
 		last_hit_time = std::chrono::duration_cast<std::chrono::milliseconds>(
 			std::chrono::system_clock::now().time_since_epoch());
 		((Player*)other)->hitByEnemy(damage);
 	}
-	else if (!other->getObjectID() & objectID::BOUNDED_PLANE)
+	else if (!(other->getObjectID() & objectID::BOUNDED_PLANE))
 		setRandomViewDirection();
 }

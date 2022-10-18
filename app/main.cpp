@@ -29,7 +29,7 @@ int main()
 	e_set.view_direction = glm::vec2(0.f, -1.f);
 	p_set.health_points = e_set.hp = 100;
 	e_set.damage = 10;
-	e_set.speed = 15.f;
+	e_set.speed = 5.f;
 	player = new sgl::Player(p_set);
 	e_set.player_to_chase = player;
 	sgl::StefanPhysics::init();

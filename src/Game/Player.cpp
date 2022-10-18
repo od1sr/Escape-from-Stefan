@@ -6,6 +6,7 @@
 
 #define CAMERA_SHIFT(height) glm::vec3(0.f, (height)*CAMERA_RELATIVE_SHIFT/2.f, 0.f)
 
+
 sgl::Player::Player(PlayerSettings &settings)
 {
 	camera = new CameraFPS(
