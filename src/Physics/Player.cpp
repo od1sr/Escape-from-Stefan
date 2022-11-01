@@ -114,7 +114,6 @@ void sgl::Player::setAsGrounded()
 void sgl::Player::hitByEnemy(int damage)
 {
 	hp -= damage;
-	std::cout << "Hit the player: " << hp + damage << " - " << damage << " = " << hp << std::endl;
 }
 
 sgl::Player::~Player()

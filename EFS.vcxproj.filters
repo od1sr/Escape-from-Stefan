@@ -102,6 +102,9 @@
     <ClCompile Include="src\Physics\Player.cpp">
       <Filter>Исходные файлы\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Window.cpp">
+      <Filter>Исходные файлы\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Graphics\CameraFPS.h">
@@ -174,6 +177,9 @@
       <Filter>Файлы заголовков\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Physics\Player.h">
+      <Filter>Файлы заголовков\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\Window.h">
       <Filter>Файлы заголовков\Game</Filter>
     </ClInclude>
   </ItemGroup>

@@ -56,8 +56,10 @@ void sgl::Enemy::tryToFollowVictimIfItIsPossible(bool has_followed_victim_recent
 		if (is_following_victim = raytest_cb.m_closestHitFraction >= 0.99f)
 		{
 			glm::vec3 old_vd = view_direction;
+			direction_to_player.y = 0.f;
 			view_direction = glm::normalize(direction_to_player);
-			rotate(0.f, glm::angle(view_direction, old_vd), 0.f);
+			glm::vec3 current_rot = getRotation();
+			rotate(0.f, current_rot.y + getAngleBetweenOldViewDirectionAndNew(old_vd, view_direction), 0.f);
 			m_pos += view_direction * speed * deltatime;
 			btTransform transform = rigid_body->getWorldTransform();
 			transform.getOrigin().setX(m_pos.x);
@@ -66,6 +68,20 @@ void sgl::Enemy::tryToFollowVictimIfItIsPossible(bool has_followed_victim_recent
 			rigid_body->setWorldTransform(transform);
 		}
 	}
+	else
+		is_following_victim = false;
+}
+
+float sgl::Enemy::getAngleBetweenOldViewDirectionAndNew(glm::vec3 old_dir, glm::vec3 new_dir)
+{
+	float D = new_dir.x * old_dir.z - new_dir.z * old_dir.x;
+	float abs_angle = glm::angle(new_dir, old_dir);
+	if (D > 0)
+		return -abs_angle;
+	if (D < 0)
+		return abs_angle;
+	else
+		return 0;
 }
 
 void sgl::Enemy::moveRandomlyIfNotFollowingVictim(bool has_followed_victim_recently, float deltatime)
@@ -82,6 +98,7 @@ void sgl::Enemy::moveRandomlyIfNotFollowingVictim(bool has_followed_victim_recen
 		rigid_body->setWorldTransform(transform);
 	}
 }
+
 
 void sgl::Enemy::setRandomViewDirection()
 {

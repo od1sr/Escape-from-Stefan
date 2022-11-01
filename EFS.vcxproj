@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Game\Enemy.cpp" />
+    <ClCompile Include="src\Game\Window.cpp" />
     <ClCompile Include="src\Graphics\CameraFPS.cpp" />
     <ClCompile Include="src\Graphics\DirectionalLight.cpp" />
     <ClCompile Include="src\glad.c" />
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game\Enemy.h" />
+    <ClInclude Include="include\Game\Window.h" />
     <ClInclude Include="include\Graphics\IDrawable.h" />
     <ClInclude Include="include\Graphics\CameraFPS.h" />
     <ClInclude Include="include\config.h" />

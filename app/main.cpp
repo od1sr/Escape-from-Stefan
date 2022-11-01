@@ -7,6 +7,7 @@
 #include <iostream>
 #include <ctime>
 #include "Enemy.h"
+#include "Window.h"
 
 void cursorMovementCallback(float d_x, float d_y, void *player);
 void keyboardHandler(sgl::Player *player, float deltatime);
@@ -32,9 +33,10 @@ int main()
 	e_set.speed = 5.f;
 	player = new sgl::Player(p_set);
 	e_set.player_to_chase = player;
+	sgl::Window::init("Minesraft");
 	sgl::StefanPhysics::init();
-	sgl::StefanGraphics::init("Minesraft", player->getCamera());
-	sgl::StefanGraphics::setCursorMovementCallback(cursorMovementCallback, player);
+	sgl::StefanGraphics::init(player->getCamera());
+	sgl::Window::setCursorMovementCallback(cursorMovementCallback, player);
 	sgl::BoundedPlaneSettings settings;
 	sgl::Texture diffuse_texture, specular_texture;
 	settings.y = -5.f;
@@ -64,8 +66,10 @@ int main()
 	sgl::StefanGraphics::addObject(enemy);
 	std::chrono::microseconds last_time = std::chrono::duration_cast<std::chrono::microseconds>(
 		std::chrono::system_clock::now().time_since_epoch());
-	while (sgl::StefanGraphics::drawScene())
+	while (!sgl::Window::windowShouldBeClosed())
 	{
+		sgl::StefanGraphics::drawScene();
+		sgl::Window::handleEvents();
 		std::chrono::microseconds now = std::chrono::duration_cast<std::chrono::microseconds>(
 			std::chrono::system_clock::now().time_since_epoch());
 		float deltatime = (now.count() - last_time.count()) * 0.000001f;
@@ -79,7 +83,7 @@ int main()
 	delete enemy->get3DModel();
 	delete enemy;
 	delete plane;
-	sgl::StefanGraphics::terminate();
+	sgl::Window::terminate();
 	sgl::StefanPhysics::terminate();
 	return 0;
 }
@@ -92,15 +96,15 @@ void cursorMovementCallback(float d_x, float d_y, void *player)
 void keyboardHandler(sgl::Player *player, float deltatime)
 {
 	char x_moving_direction = 0, z_moving_direction = 0;
-	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_W))
+	if (sgl::Window::keyIsPressed(GLFW_KEY_W))
 		z_moving_direction += 1;
-	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_S))
+	if (sgl::Window::keyIsPressed(GLFW_KEY_S))
 		z_moving_direction -= 1;
-	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_D))
+	if (sgl::Window::keyIsPressed(GLFW_KEY_D))
 		x_moving_direction += 1;
-	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_A))
+	if (sgl::Window::keyIsPressed(GLFW_KEY_A))
 		x_moving_direction -= 1;
 	player->setWalking(deltatime, x_moving_direction, z_moving_direction);
-	if (sgl::StefanGraphics::keyIsPressed(GLFW_KEY_SPACE))
+	if (sgl::Window::keyIsPressed(GLFW_KEY_SPACE))
 		player->tryToJump();
 }

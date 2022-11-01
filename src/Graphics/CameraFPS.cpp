@@ -19,7 +19,6 @@ void CameraFPS::setFrontAndRight()
 	front = direction;
 	front.y = 0.f;
 	front = glm::normalize(front);
-	//right is perpendicular of front
 	right.x = -front.z;
 	right.z = front.x;
 }

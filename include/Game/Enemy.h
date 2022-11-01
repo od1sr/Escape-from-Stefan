@@ -41,6 +41,8 @@ namespace sgl
 		void setRandomViewDirection();
 		bool checkIfKDRatioIsOver();
 		void collideCallback(ITransformable *other, btManifoldPoint &cp) override;
+		//can return negative and postive values
+		float getAngleBetweenOldViewDirectionAndNew(glm::vec3 old_dir, glm::vec3 new_dir);
 	public:
 		Enemy(EnemySettings &settings);
 		void draw(Shader &shader) const override;
