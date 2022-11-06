@@ -1,0 +1,10 @@
+# Blender MTL File: 'testtt.blend'
+# Material Count: 1
+
+newmtl Материал
+Ni 220.0
+Ks 0.5 0.5 0.5 0.1
+Kd 0.0 0.0 0.0 0.0
+d 1.0
+illum 2
+map_Kd 1500tutov.png

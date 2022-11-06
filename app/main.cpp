@@ -70,12 +70,15 @@ int main()
 	{
 		sgl::StefanGraphics::drawScene();
 		sgl::Window::handleEvents();
-		std::chrono::microseconds now = std::chrono::duration_cast<std::chrono::microseconds>(
-			std::chrono::system_clock::now().time_since_epoch());
-		float deltatime = (now.count() - last_time.count()) * 0.000001f;
-		last_time = now;
-		sgl::StefanPhysics::stepSimulation(deltatime);
-		keyboardHandler(player, deltatime);
+		if (!sgl::Window::isPaused())
+		{
+			std::chrono::microseconds now = std::chrono::duration_cast<std::chrono::microseconds>(
+				std::chrono::system_clock::now().time_since_epoch());
+			float deltatime = (now.count() - last_time.count()) * 0.000001f;
+			last_time = now;
+			sgl::StefanPhysics::stepSimulation(deltatime);
+			keyboardHandler(player, deltatime);
+		}
 	}
 	delete car->get3DModel();
 	delete car;

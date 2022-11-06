@@ -10,6 +10,7 @@ GLFWwindow *Window::win;
 sgl::CursorMovementCallback Window::cursor_callback = NULL;
 void *Window::user_pointer_for_cursor_callback = NULL;
 int Window::screen_w, Window::screen_h;
+bool Window::is_paused = false;
 
 void glfwError(int id, const char *description);
 
@@ -71,7 +72,7 @@ void Window::framebufferSizeCallback(GLFWwindow *win, int w, int h)
 
 void Window::mouseMovementCallback(GLFWwindow *win, double xpos, double ypos)
 {
-	if (cursor_callback)
+	if (cursor_callback && !is_paused)
 		cursor_callback(mouse_last_x - xpos, mouse_last_y - ypos, user_pointer_for_cursor_callback);
 	mouse_last_x = xpos;
 	mouse_last_y = ypos;
@@ -86,11 +87,6 @@ void Window::setCursorMovementCallback(CursorMovementCallback callback, void *us
 void sgl::Window::handleEvents()
 {
 	glfwPollEvents();
-}
-
-bool sgl::Window::windowShouldBeClosed()
-{
-	return glfwWindowShouldClose(win);
 }
 
 bool sgl::Window::isPaused()
