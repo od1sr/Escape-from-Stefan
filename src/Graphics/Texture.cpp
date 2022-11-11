@@ -7,17 +7,22 @@
 
 static uint getGlColorChannel(uint texture_nr_ch);
 
-void sgl::loadTexture(Texture *t, const char *path, TextureType type)
+void sgl::loadTexture(Texture *t, const char *path, TextureType type, int *texture_size_buffer)
 {
 	stbi_set_flip_vertically_on_load(true);
 	t->type = type;
 	int width, height,
 		nr_channels;
-	unsigned char* texture = stbi_load(path, &width, &height, &nr_channels, 0);
+	unsigned char *texture = stbi_load(path, &width, &height, &nr_channels, 0);
 	GL_CALL(glGenTextures(1, &(t->id)));
 	GL_CALL(glBindTexture(GL_TEXTURE_2D, t->id));
 	if (texture)
 	{
+		if (texture_size_buffer)
+		{
+			texture_size_buffer[0] = width;
+			texture_size_buffer[1] = height;
+		}
 		int gl_nr_ch = getGlColorChannel(nr_channels);
 		GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, gl_nr_ch, width, height, 0, gl_nr_ch,
 			GL_UNSIGNED_BYTE, texture));

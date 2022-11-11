@@ -22,6 +22,8 @@ namespace sgl
 		static int screen_w;
 		static int screen_h;
 		static bool is_paused;
+		static bool pressed_esc_recently;
+		static bool opened_settings;
 
 		static void framebufferSizeCallback(GLFWwindow *win, int w, int h);
 		static void mouseMovementCallback(GLFWwindow *win, double xpos, double ypos);
@@ -29,13 +31,10 @@ namespace sgl
 	public:
 		static void init(const char *window_name, int height = FULL_SCREEN, int width = FULL_SCREEN);
 		static void setCursorMovementCallback(CursorMovementCallback callback, void* user_pointer = NULL);
-		inline static bool keyIsPressed(int key)
-		{
-			return glfwGetKey(win, key);
-		}
+		inline static bool keyIsPressed(int key) { return glfwGetKey(win, key); }
 		static void handleEvents();
 		inline static bool windowShouldBeClosed() { return glfwWindowShouldClose(win); };
-		static bool isPaused();
+		inline static bool isPaused() { return is_paused; };
 		static void terminate();
 		inline static int getWindowWidth() { return screen_w; }
 		inline static int getWindowHeight() { return screen_h; }

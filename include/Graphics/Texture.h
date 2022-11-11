@@ -11,7 +11,8 @@ namespace sgl
 		uint id;
 		TextureType type;
 	};
-	void loadTexture(Texture *t, const char *path, TextureType type);
+	// texture_size_buffer is buffer which contatins 2 parameters: width and height of picture
+	void loadTexture(Texture *t, const char *path, TextureType type, int *texture_size_buffer = nullptr);
 }
 
 #endif

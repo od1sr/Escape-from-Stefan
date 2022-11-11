@@ -10,11 +10,12 @@
 using sgl::StefanGraphics;
 
 const sgl::CameraFPS *StefanGraphics::cam = NULL;
-Shader StefanGraphics::shader;
+Shader StefanGraphics::game_shader, StefanGraphics::menu_shader;
 glm::mat4 StefanGraphics::projection;
 sgl::ProjectLight StefanGraphics::flashlight;
 sgl::DirectionalLight StefanGraphics::directional_light;
 std::vector<const sgl::IDrawable*> StefanGraphics::objects_to_draw;
+std::vector<const sgl::BasicWidget*> StefanGraphics::interface_objects;
 
 void StefanGraphics::init(const CameraFPS *camera)
 {
@@ -26,11 +27,15 @@ void StefanGraphics::init(const CameraFPS *camera)
 
 void StefanGraphics::createShader()
 {
-	shader = Shader("shaders\\vertex shader.glsl", "shaders\\fragment shader.glsl");
-	Shader::CompileStatus status = shader.getCompilestatus();
+	game_shader = Shader("shaders\\vertex shader.glsl", "shaders\\fragment shader.glsl");
+	menu_shader = Shader("shaders\\menu vertex shader.glsl", "shaders\\menu fragment shader.glsl");
+	Shader::CompileStatus status = game_shader.getCompilestatus();
 	if (status != Shader::CompileStatus::OK)
 		exit((int)status);
-	shader.use();
+	status = menu_shader.getCompilestatus();
+	if (status != Shader::CompileStatus::OK)
+		exit((int)status);
+	game_shader.use();
 }
 
 void StefanGraphics::createLights()
@@ -50,8 +55,8 @@ void StefanGraphics::createLights()
 	directional_light.ambient = vec4(0.8f, 0.8f, 0.8f, 1.f);
 	directional_light.diffuse = vec4(0.5f, 0.5f, 0.5f, 1.f);
 	directional_light.specular = vec4(0.1f);
-	flashlight.addToShaderProgram(shader);
-	directional_light.addToShaderProgram(shader);
+	flashlight.addToShaderProgram(game_shader);
+	directional_light.addToShaderProgram(game_shader);
 	directional_light.turnOn();
 }
 
@@ -65,16 +70,25 @@ void StefanGraphics::drawScene()
 		0.1f, 1000.0f); 
 	GL_CALL(glClearColor(0.1f, 0.f, 0.f, 1.f));
 	GL_CALL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
-	shader.use();
-	shader.setMat4("projection", projection);
-	shader.setMat4("view", view);
-	shader.setVec3("camera_pos", cam_pos);
+	game_shader.use();
+	game_shader.setMat4("projection", projection);
+	game_shader.setMat4("view", view);
+	game_shader.setVec3("camera_pos", cam_pos);
 	flashlight.setDirection(cam_direction);
 	flashlight.pos = cam_pos;
-	Light::DrawLights(shader);
+	Light::DrawLights(game_shader);
 	for (int i = objects_to_draw.size() - 1; i >= 0; --i)
-		objects_to_draw[i]->draw(shader);
+		objects_to_draw[i]->draw(game_shader);
+	drawInterface(projection);
 	Window::swapBuffers();
+}
+
+void sgl::StefanGraphics::drawInterface(glm::mat4 projection)
+{
+	menu_shader.use();
+	menu_shader.setMat4("projection", projection);
+	for (int i = interface_objects.size() - 1; i >= 0; --i)
+		interface_objects[i]->draw(menu_shader);
 }
 
 void sgl::StefanGraphics::setCamera(const CameraFPS *cam)

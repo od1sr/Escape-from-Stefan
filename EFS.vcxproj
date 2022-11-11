@@ -145,6 +145,7 @@
     <ClCompile Include="src\Graphics\DirectionalLight.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Graphics\Light.cpp" />
+    <ClCompile Include="src\Graphics\Widgets.cpp" />
     <ClCompile Include="src\logging.cpp" />
     <ClCompile Include="app\main.cpp" />
     <ClCompile Include="src\Graphics\Mesh.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\Graphics\DirectionalLight.h" />
     <ClInclude Include="include\Graphics\Light.h" />
+    <ClInclude Include="include\Graphics\Widgets.h" />
     <ClInclude Include="include\logging.h" />
     <ClInclude Include="include\Graphics\Mesh.h" />
     <ClInclude Include="include\Graphics\Model.h" />

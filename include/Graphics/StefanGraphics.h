@@ -12,6 +12,7 @@
 #include "IDrawable.h"
 #include <vector>
 #include "Player.h"
+#include "Widgets.h"
 
 namespace sgl
 {
@@ -19,14 +20,17 @@ namespace sgl
 	{
 	private:
 		static const CameraFPS *cam;
-		static Shader shader;
+		static Shader game_shader;
+		static Shader menu_shader;
 		static glm::mat4 projection;
 		static ProjectLight flashlight;
 		static DirectionalLight directional_light;
-		static std::vector<const sgl::IDrawable*> objects_to_draw;
+		static std::vector<const IDrawable*> objects_to_draw;
+		static std::vector<const BasicWidget*> interface_objects;
 
 		static void createShader();
 		static void createLights();
+		static void drawInterface(glm::mat4 projection);
 	public:
 		static void init(const CameraFPS *camera);
 		static void drawScene();

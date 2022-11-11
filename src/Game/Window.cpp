@@ -10,7 +10,7 @@ GLFWwindow *Window::win;
 sgl::CursorMovementCallback Window::cursor_callback = NULL;
 void *Window::user_pointer_for_cursor_callback = NULL;
 int Window::screen_w, Window::screen_h;
-bool Window::is_paused = false;
+bool Window::is_paused = false, Window::opened_settings = false, Window::pressed_esc_recently = false;
 
 void glfwError(int id, const char *description);
 
@@ -87,11 +87,14 @@ void Window::setCursorMovementCallback(CursorMovementCallback callback, void *us
 void sgl::Window::handleEvents()
 {
 	glfwPollEvents();
-}
+	bool pressed_esc_now = keyIsPressed(GLFW_KEY_ESCAPE);
+	if (pressed_esc_now && !pressed_esc_recently)
+		is_paused = !is_paused;
+	pressed_esc_recently = pressed_esc_now;
+	if (is_paused)
+	{
 
-bool sgl::Window::isPaused()
-{
-	return false;
+	}
 }
 
 void sgl::Window::terminate()

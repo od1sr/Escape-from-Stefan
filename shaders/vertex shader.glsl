@@ -1,4 +1,5 @@
 #version 420 core
+
 layout (location = 0) in vec3 pos;  
 layout (location = 1) in vec2 texCoord;
 layout (location = 2) in vec3 surfase_normal;
@@ -8,7 +9,7 @@ out vec2 TexCoord;
 out vec3 normal;
 out vec3 frag_pos;
 out vec4 diffuse_color;
-out vec4 specular_color; 
+out vec4 specular_color;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
